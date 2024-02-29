@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin rights</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="text-content" style="text-align: center;">
+
+            <div class="mb-3">
+                <h1>Tervetuloa pakohuonepeliin!</h1>
+            </div>
+
+            <div class="mb-3">
+                <select id="allEscapeRooms">
+                    <!-- All existing escape rooms are placed here -->
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <button onclick="startGame()">Aloita peli</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch("/allEscapeRooms");
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error("Error:", error);
+                return;
+            }
+        }
+
+        function renderDropdownMenu(data, id) {
+            const dropdownMenu = document.getElementById(id);
+            
+            data.forEach(room => {
+                const option = document.createElement("option");
+                option.value = room.title;
+                option.innerText = room.title;
+                dropdownMenu.appendChild(option);
+            })
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const allEscapeRooms = await fetchData();
+            renderDropdownMenu(allEscapeRooms, "allEscapeRooms");
+        })
+    </script>
+</body>
+</html>

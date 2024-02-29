@@ -1,0 +1,29 @@
+[
+    {
+        "title": "Escape Room 1",
+        "description": "Description of Escape Room 1",
+        "problems": [
+            {
+                "title": "First problem",
+                "description": "Information about the problem",
+                "videoLink": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                "correctAnswer": "12345678",
+                "hints": ["hint1", "hint2", "hint3"]
+            },
+            {
+                "title": "Second problem",
+                "description": "",
+                "videoLink": "",
+                "correctAnswer": "",
+                "hints": []
+            }
+        ]
+    },
+    {
+        "title": "Escape Room 2",
+        "description": "Description for Escape Room 2",
+        "problems": [
+            
+        ]
+    }
+]
