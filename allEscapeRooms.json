@@ -2,6 +2,7 @@
     {
         "title": "Escape Room 1",
         "description": "Description of Escape Room 1",
+        "videoLink": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         "problems": [
             {
                 "title": "First problem",
