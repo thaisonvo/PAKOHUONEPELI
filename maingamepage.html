@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pakohuonepeli</title>
+        <link rel="stylesheet" href="stylesheet_main.css">
+
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <header class="header">
+                <h1>Tervetuloa Pakohuonepeliin!</h1>
+            </header>
+        <div class="instructions">
+            <!--Kenttä pelaajalle tarkoitetuille ohjeille-->
+            <h2>Ohjeet pelaajalle:</h2>
+            <div id="instructionsContent">
+                <!--Tähän lisätään ohjeet-->
+            </div>
+        </div>
+            <div class="video">
+                <!--Kenttä videolle-->
+                <h2>Tässä video/kuvamateriaali:</h2>
+                <video controls class="video">
+                    <source src="https://www.youtube.com/watch?v=ItCnZpUzay8" type="video/mp4">
+                    Your browser might not support the video tag, try again.
+                </video>
+            </div>
+            <footer class="footer">
+                <div class="buttons">
+                    <button id="Tarkista">Tarkista koodi</button>
+                    <div id="codeinputContainer" style="display: none;">
+                        <textarea id="codeInput" placeholder="Syötä koodi tähän"></textarea>
+                        <button onclick="checkTheCode">Tarkista</button>
+                    </div>
+                    <button id="vihje" onclick="showHint">Näytä vihje</button>
+                    <div id="hintContainer" style="display: none;">
+                        <p id="hintText">Vinkki: Tässä on vinkki pelaajalle</p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>
