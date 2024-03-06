@@ -9,7 +9,7 @@
                 "description": "Information about the problem",
                 "videoLink": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
                 "correctAnswer": "12345678",
-                "hints": ["hint1", "hint2", "hint3"]
+                "hints": ["too bad, skill issue", "hint2", "hint3"]
             },
             {
                 "title": "Second problem",

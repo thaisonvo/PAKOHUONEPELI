@@ -2,7 +2,8 @@ body {
     background-color: #0b0c10;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     text-align: center;
-    margin: 0; /* Remove default margin to prevent unwanted space around the body */
+    margin: 0; /* Removing default marginals */
+    overflow-x: hidden;
 }
 
 .header {
@@ -43,12 +44,21 @@ h1 {
     box-sizing: border-box;
 }
 
+.video-container {
+    height: 450px;
+    width: 100%;
+    padding: 10px;
+    margin: 10px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
 .video {
     background-color: #0b0c10;
-    width: 100%;
-    max-width: 600px;
-    height: auto;
-    margin: 0 auto;
+    position: flex;
+    height: 95%;
+    width: 95%;
+    overflow-x: hidden;
 }
 
 .footer {
@@ -58,6 +68,17 @@ h1 {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    overflow-x: hidden;
+}
+
+input[type="text"] {
+    width: 80%;
+    padding: 10px; 
+    margin: 10px 0; 
+    border: 2px solid #66fcf1;
+    border-radius: 5px; 
+    color: black; 
+    background-color: #ffffff; 
 }
 
 .buttons {
@@ -78,7 +99,38 @@ button {
     border-style: solid;
     border-color: #66fcf1;
     background-color: #1f2833;
+    transition: background-color 0.3s;
 }
+
+#continueButton {
+    margin: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #66fcf1;
+    cursor: pointer;
+    border-radius: 7px;
+}
+
+#hintContainer {
+    background-color: #1f2833;
+    color: #66fcf1; 
+    padding: 20px; 
+    margin-top: 20px; 
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#toggleHintBox {
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    background-color: #439d99;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+
 
 textarea {
     width: 100%;
