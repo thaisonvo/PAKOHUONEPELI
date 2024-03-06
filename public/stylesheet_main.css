@@ -112,23 +112,62 @@ button {
     border-radius: 7px;
 }
 
-#hintContainer {
-    background-color: #1f2833;
-    color: #66fcf1; 
-    padding: 20px; 
-    margin-top: 20px; 
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.hintVisual {
+    height: 15px;
+    width: 15px;
+    background-color: #00ff55;
+    border-radius: 50%;
+    display: inline-block;
 }
 
-#toggleHintBox {
-    padding: 5px 10px;
-    margin-bottom: 10px;
-    background-color: #439d99;
-    color: white;
-    border: none;
+.modal {
+    display: none; /* Piilotettu oletuksena */
+    position: fixed; /* Pysyy paikallaan sivun vierityksen aikana */
+    z-index: 1; /* Sijaitsee muiden elementtien päällä */
+    left: 0;
+    top: 0;
+    width: 100%; /* Leveys */
+    height: 100%; /* Korkeus */
+    overflow: auto; /* Mahdollistaa vierityksen, jos tarpeen */
+    background-color: rgb(0,0,0); /* Taustaväri */
+    background-color: rgba(0,0,0,0.4); /* Musta, läpinäkyvyys */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% ylhäältä ja keskitetty */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* 80% sivun leveydestä */
+    position: relative; /* Lisätty, jotta sisällön sijaintia voidaan säätää */
+}
+
+.close, .minimize {
+    color: #aaa;
+    float: right; /* Tämä rivi voidaan poistaa, jos käytämme position:absolute; */
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute; /* Absoluuttinen sijainti suhteessa .modal-content:iin */
+    top: 5px; /* Sijainti yläreunasta */
+}
+
+.close {
+    right: 5px; /* Sijainti oikeasta reunasta */
+}
+
+.minimize {
+    right: 40px; /* Sijainti hieman vasemmalle sulkemisnapista */
+}
+
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
     cursor: pointer;
 }
+
 
 
 
