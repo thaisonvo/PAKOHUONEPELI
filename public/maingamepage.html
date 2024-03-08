@@ -9,7 +9,11 @@
 <body>
     <div class="wrapper">
         <header class="header">
+            <div class="timerContainer">
+                <div id="timerDisplay" >01:30:00</div>
+            </div>
             <h1 id="gameTitle">Tervetuloa Pakohuonepeliin!</h1>
+            <div class="spacer"></div>
         </header>
         <div class="instructions">
             <h2>Ohjeet pelaajalle:</h2>
@@ -80,6 +84,10 @@
                 startGameButton.style.display = "none";
                 buttonsDiv.style.display = "flex";
                 fetchEscapeRoomData();
+                //Ajastimen asetukset ja käynnistys, kun peli aloitetaan
+                var timerDuration = 60 * 90; //1h 30min
+                var display = document.getElementById('timerDisplay');
+                startTimer(timerDuration, display);
             });
     
             // Näyttää vihjeen
@@ -171,6 +179,41 @@
                     hintVisual.classList.add("hintVisual");
                     hintsVisualContainer.appendChild(hintVisual);
                 }
+            }
+
+            //Ajastimen logiikka tässä
+            function startTimer(duration, display) {
+                var start = Date.now(),
+                    diff,
+                    hours,
+                    minutes,
+                    seconds;
+                function timer() {
+                    //Lasketaan jäljellä oleva aika
+                    diff = duration - (((Date.now() - start) / 1000) | 0);
+
+                    hours = ((diff / 3600) | 0);
+                    minutes = ((diff % 3600) / 60) | 0;
+                    seconds = (diff % 60) | 0;
+
+                    hours = hours < 10 ? "0" + hours : hours;
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                    display.textContent = hours + ":" + minutes + ":" + seconds;
+
+                    if (diff <=0) {
+                        //Kun aika loppuu...
+                        clearInterval(timerInterval);
+                        display.textContent = "Aika on nyt päättynyt!";
+                        //Määritetään tähän mitä tapahtuu pelissä, kun aika on loppunut
+                    }
+
+                };
+
+                //Päivitetään ajastinta joka sekunnilla
+                timer();
+                var timerInterval = setInterval(timer, 1000);
             }
         });
     </script>
