@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin rights</title>
+    <title>Kotisivu - Pakohuonepelit</title>
 </head>
 
 <body>
@@ -22,7 +22,7 @@
             </div>
             
             <div class="mb-3">
-                <button onclick="startGame()">Aloita peli</button>
+                <button id="startGameButton">Aloita peli</button>
             </div>
 
         </div>
@@ -39,7 +39,7 @@
                 return data;
             } catch (error) {
                 console.error("Error:", error);
-                return;
+                alert("Tapahtui odottamaton virhe. Yritä myöhemmin uudelleen.");
             }
         }
 
@@ -54,9 +54,36 @@
             })
         }
 
+        function startGame(escapeRoom) {
+            try {
+                window.location.href = `/maingamepage?escapeRoom=${encodeURIComponent(escapeRoom)}`;
+            } catch (error) {
+                console.error("Error", error);
+                alert("Tapahtui odottamaton virhe. Yritä myöhemmin uudelleen.");
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", async () => {
             const allEscapeRooms = await fetchData();
+
+            if (!allEscapeRooms) {
+                console.error("Failed to retrieve existing Escape Rooms");
+                return;
+            }
+
             renderDropdownMenu(allEscapeRooms, "allEscapeRooms");
+
+            const dropdownMenu = document.getElementById("allEscapeRooms");
+            let selectedEscapeRoom = dropdownMenu.value;
+
+            dropdownMenu.addEventListener("change", () => {
+                selectedEscapeRoom = dropdownMenu.value;
+            })
+
+            const startGameButton = document.getElementById("startGameButton");
+            startGameButton.addEventListener("click", () => {
+                startGame(selectedEscapeRoom);
+            })
         })
     </script>
 </body>

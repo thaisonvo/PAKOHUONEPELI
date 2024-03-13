@@ -38,142 +38,97 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Alustetaan muuttujat pelin datalle, nykyisen huoneen indeksille ja vihjeiden määrälle
-            let escapeRoomData = [];
-            let currentRoomIndex = 0;
-            let vihjeCount = 0;
-    
-            // Haetaan viittaukset DOM-elementteihin
-            const startGameButton = document.getElementById("startGameButton");
-            const buttonsDiv = document.querySelector(".buttons");
-            const continueButton = document.getElementById("continueButton");
-            const instructionsContent = document.getElementById("instructionsContent");
-            const escapeRoomVideo = document.getElementById("escapeRoomVideo");
-            const codeInput = document.getElementById("codeInput");
-            const hintModal = document.getElementById("hintModal");
-            const modalHintText = document.getElementById("modalHintText");
-            const closeModal = document.querySelector(".close");
-            const minimizeButton = document.querySelector(".minimize");
-            const hintButton = document.getElementById("vihje");
-            const hintsVisualContainer = document.getElementById("hintsVisualContainer");
-    
-            // Määritellään tapahtumankäsittelijät
-    
-            // Sulkee vihjeikkunan ja päivittää vihjeiden määrän
-            closeModal.addEventListener("click", function() {
-                hintModal.style.display = "none";
-                // Vähennetään vihjeiden määrää, jos vihjeitä on jäljellä
-                if (vihjeCount < escapeRoomData[currentRoomIndex].problems[0].hints.length) {
-                    vihjeCount++;
-                }
-                updateHintVisuals(); // Päivittää vihjeiden visuaaliset merkit
-            });
-    
-            // Piilottaa vihjeikkunan
-            minimizeButton.addEventListener("click", function() {
-                hintModal.style.display = "none";
-            });
-    
-            // Aloittaa pelin ja hakee pelin datan
-            startGameButton.addEventListener("click", function() {
-                startGameButton.style.display = "none";
-                buttonsDiv.style.display = "flex";
-                fetchEscapeRoomData();
-            });
-    
-            // Näyttää vihjeen
-            hintButton.addEventListener("click", showHint);
-    
-            // Tarkistaa syötetyn koodin
-            document.getElementById("checkTheCode").addEventListener("click", function () {
-                checkTheCode();
-            });
-    
-            // Hakee pakohuoneiden datan palvelimelta
-            function fetchEscapeRoomData() {
-                fetch('/allEscapeRooms')
-                    .then(response => response.json())
-                    .then(data => {
-                        escapeRoomData = data;
-                        loadRoomData(currentRoomIndex); // Lataa nykyisen huoneen datan
-                    })
-                    .catch(error => {
-                        console.error('Virhe ladattaessa pakohuoneiden dataa:', error);
-                        alert('Pelin tietojen lataaminen epäonnistui.');
-                    });
+        // Extract the user's selected escape room from the URL.
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedRoom = urlParams.get("escapeRoom");
+
+        // If no escape room has been selected, redirect the user to the home page.
+        if (!selectedRoom) {
+            alert("Valitse ensin pakohuone!");
+            window.location.href = "/";
+        }
+
+        // Fetch information about the selected escape room.
+        fetch(`/escapeRoomInfo/${selectedRoom}`)
+        .then(response => response.json())
+        .then(data => updateContent(data))
+
+        // Event listener for the 'start game' button.
+        const startButton = document.getElementById("startGameButton");
+        startButton.addEventListener("click", async () => {
+            try {
+                // Fetch the first question of the escape room.
+                const response = await fetch("/game");
+                const data = await response.json();
+
+                // Update the content of the page.
+                updateContent(data);
+                document.querySelector(".buttons").style.display = "block";
+                startButton.style.display = "none";
+            } catch (error) {
+                console.error(error);
             }
-    
-            // Lataa nykyisen huoneen tiedot ja asettaa näkymän
-            function loadRoomData(index) {
-                if (index < escapeRoomData.length) {
-                    const room = escapeRoomData[index];
-                    document.getElementById("gameTitle").textContent = room.title; // Päivittää pelin otsikon
-                    instructionsContent.innerHTML = `<p>${room.description}</p>`; // Päivittää ohjeet/kuvaus
-                    escapeRoomVideo.src = room.videoLink.replace("watch?v=", "embed/"); // Päivittää videon
-                    updateHintVisuals(); // Päivittää vihjeiden visuaaliset merkit
-                    continueButton.style.display = "none"; // Piilottaa "Jatka seuraavaan huoneeseen" -napin
-                    buttonsDiv.style.display = "flex"; // Näyttää ohjausnapit
-    
-                } else {
-                    alert("Olet suorittanut kaikki huoneet!");
-                    // Voitaisiin piilottaa kaikki ohjausnapit tai näyttää "Aloita alusta" -nappi
+        })
+
+        // Event listener for handling answer submissions.
+        const submitAnswer = document.getElementById("checkTheCode");
+        submitAnswer.addEventListener("click", async () => {
+            try {
+                // Extract the inputted answer.
+                const answer = document.getElementById("codeInput").value;
+                // Send a request to the server with the inputted answer for validation.
+                const response = await fetch("/answerSubmission", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ answer })
+                })
+                const data = await response.json();
+
+                // Check the response from the server.
+                if (response.status === 422) {
+                    alert(data.error);
+                    document.getElementById("codeInput").value = '';
+                    return;
                 }
+
+                // Update the content after a correct answer.
+                updateContent(data);
+                document.getElementById("codeInput").value = '';
+            } catch (error) {
+                console.error(error);
             }
-    
-            // Näyttää vihjeen, jos vihjeitä on jäljellä
-            function showHint() {
-                if (vihjeCount < escapeRoomData[currentRoomIndex].problems[0].hints.length) {
-                    modalHintText.textContent = "Vinkki: " + escapeRoomData[currentRoomIndex].problems[0].hints[vihjeCount];
-                    hintModal.style.display = "block";
-                } else {
-                    alert("Ei enää vihjeitä jäljellä!");
-                }
+        })
+
+        // Event listener for showing a hint.
+        const showHint = document.getElementById("vihje");
+        showHint.addEventListener("click", async () => {
+            try {
+                // Fetch a hint from the server.
+                const response = await fetch("/hint");
+                const hint = await response.text();
+
+                // Display the hint in the hint window.
+                document.getElementById("modalHintText").innerText = hint;
+                document.getElementById("hintModal").style.display = 'block';
+            } catch (error) {
+                console.error(error);
             }
-    
-            // Tarkistaa, onko syötetty koodi oikein, ja käsittelee tuloksen
-            document.getElementById("checkTheCode").addEventListener("click", function () {
-                const room = escapeRoomData[currentRoomIndex];
-                    if (codeInput.value === room.problems[0].correctAnswer) {
-                        alert("Koodi on oikein!");
-                        if (currentRoomIndex < escapeRoomData.length - 1) {
-                        currentRoomIndex++; // Siirrytään seuraavaan huoneeseen
-                        continueButton.style.display = "block"; // Näytetään "Jatka seuraavaan huoneeseen" -nappi
-                        buttonsDiv.style.display = "none"; // Piilotetaan muut ohjausnapit
-                        } else {
-                            alert("Olet suorittanut kaikki huoneet!");
-                            // Määritellään tähän tulevaisuudessa esim. tulos sivulle siirtyminen
-                        }
-                    } else {
-                        alert("Koodi on väärin. Yritä uudelleen!");
-                    }
-                    codeInput.value = ""; // Tyhjennetään syötekenttä
-            });
-    
-            // Siirtyy seuraavaan huoneeseen
-            continueButton.addEventListener("click", function() {
-                if (currentRoomIndex < escapeRoomData.length) {
-                    buttonsDiv.style.display = "flex"; // Näyttää ohjausnapit
-                    continueButton.style.display = "none"; // Piilottaa "Jatka seuraavaan huoneeseen" -napin
-                    
-                    loadRoomData(currentRoomIndex); // Lataa seuraavan huoneen tiedot
-                    
-                }
-            });
-    
-            // Päivittää vihjeiden visuaaliset merkit
-            function updateHintVisuals() {
-                hintsVisualContainer.innerHTML = "";
-                const room = escapeRoomData[currentRoomIndex];
-                let hintsLeft = room.problems[0].hints.length - vihjeCount;
-                for (let i = 0; i < hintsLeft; i++) {
-                    let hintVisual = document.createElement("span");
-                    hintVisual.classList.add("hintVisual");
-                    hintsVisualContainer.appendChild(hintVisual);
-                }
-            }
-        });
+        })
+
+        // Event listener for closing the hint window.
+        const closeHint = document.querySelector(".close");
+        closeHint.addEventListener("click", () => {
+            document.getElementById("hintModal").style.display = 'none';
+        })
+
+        // Updates the title, description and video of the page.
+        function updateContent(data) {
+            document.getElementById("gameTitle").innerText = data.title;
+            document.getElementById("instructionsContent").innerText = data.description;
+            document.getElementById("escapeRoomVideo").src = `https://www.youtube.com/embed/${data.videoLink}`;
+        }
     </script>
-    
 </body>
 </html>
