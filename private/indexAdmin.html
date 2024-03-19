@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Tools</title>
+    <link rel="stylesheet" href="/styleIndexAdmin.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Tools</h1>
+    </header>
+    <div class="container mt-5">
+        <div class="box">
+            <h2>Lisää pakohuone</h2>
+            <button id="addRoomButton" class="btn-add">Lisää</button>
+        </div>
+        <div class="box">
+            <h2>Muokkaa olemassa olevia pakohuoneita</h2>
+            <button class="btn-edit">Muokkaa</button>
+        </div>
+        <div class="box">
+            <h2>Poista pakohuone</h2>
+            <button id="deleteRoomButton" class="btn-remove">Poista</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('addRoomButton').addEventListener('click', function() {
+                window.location.href = '/admin/add-room';
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('deleteRoomButton').addEventListener('click', function() {
+                window.location.href = '/admin/delete-room';
+            });
+        });
+    </script>
+</body>
+</html>

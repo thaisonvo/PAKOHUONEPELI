@@ -126,7 +126,7 @@
         // Updates the title, description and video of the page.
         function updateContent(data) {
             document.getElementById("gameTitle").innerText = data.title;
-            document.getElementById("instructionsContent").innerText = data.description;
+            document.getElementById("instructionsContent").innerHTML = data.description;
             document.getElementById("escapeRoomVideo").src = `https://www.youtube.com/embed/${data.videoLink}`;
         }
     </script>

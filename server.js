@@ -10,6 +10,7 @@ const server = http.createServer(app);
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'private')));
 app.use(session({
     secret: "fsjlkdhoHRUQWDUJOASFjksdha",
     resave: false,
@@ -133,6 +134,80 @@ function initializePlayerData(sessionId, escapeRoomData) {
     activeGamesMap.set(sessionId, playerData);
 }
 
+app.get('/admin/home', (req, res) => {
+    const indexPath = path.join(__dirname, 'private', 'indexAdmin.html');
+    res.sendFile(indexPath);
+});
+
+app.get('/admin/add-room', (req, res) => {
+    const adminPagePath = path.join(__dirname, 'private', 'AdminAddRooms.html');
+    //Here you can add authentication mechanism if needed
+
+    res.sendFile(adminPagePath);
+});
+
+app.get('/admin/delete-room', (req, res) => {
+    const pagePath = path.join(__dirname, 'private', 'AdminDeleteRooms.html');
+    res.sendFile(pagePath);
+});
+
+// Add new escape room
+app.post("/escapeRoom", (req, res) => {
+    const newRoom = req.body;
+
+    // Reading existing escape rooms
+    fs.readFile("allEscapeRooms.json", "utf8", (err, data) => {
+        if (err) {
+            res.status(500).send("Error reading escape rooms data");
+            return;
+        }
+        const rooms = JSON.parse(data);
+        rooms.push(newRoom); // Adding new escape room to the list
+
+        // Writing updated list back to the file
+        fs.writeFile("allEscapeRooms.json", JSON.stringify(rooms, null, 2), "utf8", err => {
+            if (err) {
+                res.status(500).send("Error saving new escape room");
+                return;
+            }
+            res.status(201).json({message: "Escape room added successfully"});
+        });
+    });
+});
+
+// Listing all escape rooms
+app.get('/escapeRoom/list', (req, res) => {
+    fs.readFile("allEscapeRooms.json", "utf8", (err, data) => {
+        if (err) {
+            res.status(500).send("Error reading escape rooms data");
+            return;
+        }
+        const rooms = JSON.parse(data);
+        res.json(rooms);
+    });
+});
+
+// Deleting selected escape room
+app.post("/escapeRoom/delete", (req, res) => {
+    const { title } = req.body;
+
+    fs.readFile("allEscapeRooms.json", "utf8", (err, data) => {
+        if (err) {
+            res.status(500).send("Error reading escape rooms data");
+            return;
+        }
+        let rooms = JSON.parse(data);
+        rooms = rooms.filter(room => room.title !== title); // Deleting escape room
+
+        fs.writeFile("allEscapeRooms.json", JSON.stringify(rooms, null, 2), "utf8", err => {
+            if (err) {
+                res.status(500).send("Error saving the updated escape rooms list");
+                return;
+            }
+            res.json({message: "Escape room deleted successfully"});
+        });
+    });
+});
 
 const port = 3000;
 server.listen(port, () => {
