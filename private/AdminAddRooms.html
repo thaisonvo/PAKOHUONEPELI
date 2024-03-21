@@ -45,12 +45,21 @@
             box-shadow: 0 0 10px rgba(127, 127, 127, 0.1);
         }
 
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
         .btn-send {
             background-color: #0fbf0f;
         }
 
         .btn-addProblem {
             background-color: #4c4cbf;
+        }
+
+        .btn-back {
+            background-color: #f8b014;
         }
     
         button:hover {
@@ -98,7 +107,8 @@
                     <div class="mb-3">
                         <button type="button" id="addProblemButton" class="btn-addProblem">Lisää uusi pulma</button>
                     </div>
-                    <div>
+                    <div class="button-container">
+                        <button class="btn-back" id="backhomeButton">Takaisin</button>
                         <button class="btn-send" onclick="sendNewRoom()">Lähetä</button>
                     </div>
                 </div>
@@ -117,7 +127,7 @@
     $(document).ready(function() {
         // Initialize Summernote for the escape room description
         $('#roomDescription').summernote({
-            height: 100, // Set the initial height
+            height: 100, // set the initial height
             toolbar: [
                 ['style', ['bold', 'italic']],
                 ['fontsize', ['fontsize']],
@@ -127,11 +137,19 @@
     
         // Problem index counter for unique problem IDs
         let problemIndex = 0;
+
+        // Back-button functionality
+        $('#backhomeButton').click(function() {
+        var confirmLeave = confirm("Tietoja ei ole tallennettu, haluatko varmasti poistua?");
+            if (confirmLeave) {
+                window.location.href = '/admin/home';
+            }
+        });
     
         // Functionality for adding a new problem
         $('#addProblemButton').click(function() {
             const problemDivID = `problemDescription-${problemIndex}`; // Unique ID for each problem description
-    
+
             // Append a new problem form dynamically into the problems container
             $('#problemsContainer').append(`
                 <div class="problem mb-3">
@@ -146,7 +164,7 @@
     
             // Initialize Summernote for the newly added problem description
             $(`#${problemDivID}`).summernote({
-                height: 100, // Set the initial height
+                height: 100,
                 toolbar: [
                     ['style', ['bold', 'italic']],
                     ['fontsize', ['fontsize']],
@@ -158,53 +176,73 @@
         });
     });
     
-    // Function to send the new escape room data to the server
-    function sendNewRoom() {
-    const title = $('#roomTitle').val().trim(); // Trim to remove whitespace
-    const description = $('#roomDescription').summernote('code').trim(); // Trim to remove whitespace
-
-    // Check if any of the required fields are empty
-    if (!title || !description) {
-        alert("Kaikki pakolliset kentät tulee täyttää.");
-        return; // Prevent further execution
+    // Function to check if the escape room title already exists
+    function checkRoomTitleExists(title, callback) {
+        $.ajax({
+            url: '/escapeRoom/checkTitle',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ title: title }),
+            success: function(response) {
+                callback(null, response.exists);
+            },
+            error: function(xhr, status, error) {
+                callback(error);
+            }
+        });
     }
 
-    // Gather all problems data
-    const problems = $('.problem').map(function() {
-        return {
-            title: $(this).find('.problemTitle').val(),
-            description: $(this).find('textarea').summernote('code'),
-            videoLink: $(this).find('.problemVideoLink').val(),
-            correctAnswer: $(this).find('.correctAnswer').val(),
-            hint: $(this).find('.hint').val()
-        };
-    }).get();
+    // Function to send the new escape room data to the server
+    function sendNewRoom() {
+        const title = $('#roomTitle').val().trim();
+        const description = $('#roomDescription').summernote('code').trim();
 
-    // Package the new room data
-    const newRoom = {
-        title,
-        description,
-        videoLink,
-        problems
-    };
-
-    // AJAX request to send the new room data to the server
-    $.ajax({
-        url: '/escapeRoom',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(newRoom),
-        success: function(response) {
-            alert("Pakohuone lisätty onnistuneesti!");
-            window.location.href = '/admin/home'; // Redirect on success
-        },
-        error: function(xhr, status, error) {
-            console.error("Error adding escape room:", error);
-            alert("Virhe pakohuoneen lisäämisessä. Tarkista tiedot ja yritä uudelleen.");
+        //Check if any of the required fields are empty
+        if (!title || !description) {
+            alert("Kaikki pakolliset kentät tulee täyttää.");
+            return; //Prevent further execution
         }
-    });
-}
 
+        // Gather all problems data
+        const problems = $('.problem').map(function() {
+            return {
+                title: $(this).find('.problemTitle').val(),
+                description: $(this).find('textarea').summernote('code'),
+                videoLink: $(this).find('.problemVideoLink').val(),
+                correctAnswer: $(this).find('.correctAnswer').val(),
+                hint: $(this).find('.hint').val()
+            };
+        }).get();
+
+        // Package the new room data
+        const newRoom = {
+            title,
+            description,
+            videoLink: $('#videoLink').val().trim(),
+            problems
+        };
+
+        // AJAX request to send the new room data to the server
+        $.ajax({
+            url: '/escapeRoom',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(newRoom),
+            success: function(response) {
+                alert("Pakohuone lisätty onnistuneesti!");
+                window.location.href = '/admin/home'; // Redirect on success
+            },
+            error: function(xhr, status, error) {
+                if (xhr.status === 400) {
+                    alert("Huoneen lisääminen ei onnistunut, koska huoneen nimi on jo käytössä. Anna toinen nimi.")
+                } else {
+                    console.error("Error adding escape room:", error);
+                    alert("Virhe pakohuoneen lisäämisessä. Tarkista tiedot ja yritä uudelleen.");
+                }
+            }
+        });
+    }
 </script>
 </body>
-</html>    
+</html>
+    

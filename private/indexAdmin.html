@@ -17,7 +17,7 @@
         </div>
         <div class="box">
             <h2>Muokkaa olemassa olevia pakohuoneita</h2>
-            <button class="btn-edit">Muokkaa</button>
+            <button id="editRoomButton" class="btn-edit">Muokkaa</button>
         </div>
         <div class="box">
             <h2>Poista pakohuone</h2>
@@ -29,6 +29,12 @@
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('addRoomButton').addEventListener('click', function() {
                 window.location.href = '/admin/add-room';
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('editRoomButton').addEventListener('click', function() {
+                window.location.href = '/admin/edit-room';
             });
         });
 
