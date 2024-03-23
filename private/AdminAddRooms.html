@@ -15,22 +15,77 @@
             background-color: #f4f4f4;
             color: #333;
         }
+
+        header {
+            background-color: #f4f4f4;
+            color: #3d3d3d;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 0;
+            font-size: 36px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            text-shadow: 5px 5px 10px #b8b8b8;
+            font-weight: bold;
+        }
+
+        h3 {
+            text-align: start;
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+    
+        .form-label {
+            text-align: left;
+            font-weight: 550;
+            display: block;
+        }
     
         .container {
-            max-width: 95%;
+            max-width: 90%;
             margin: 2rem auto;
             padding: 20px;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             border-radius: 8px;
         }
-    
-        .card {
-            padding: 15px;
-            background-color: #f9f9f9;
+
+        .form-label, .problem-container label {
+            text-align: left;
+            font-weight: 550;
+            display: block;
+        }
+
+        .problem-container label {
+            margin-bottom: 5px; 
+        }
+
+        .problem-container input,
+        .problem-container textarea {
+            margin-bottom: 20px;
+        }
+
+        .problem-container {
+            background-color: #f4f4f4;
+            padding: 20px;
+            margin-bottom: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            border: solid 1px #aaaaaa
+        }
+
+        .note-editable {
+            background-color: #fdfdfd; 
+        }
+    
+        .card {
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
         }
     
         button {
@@ -44,20 +99,20 @@
             transition: background-color 0.3s ease;
             box-shadow: 0 0 10px rgba(127, 127, 127, 0.1);
         }
-
+    
         .button-container {
             display: flex;
             justify-content: space-between;
         }
-
+    
         .btn-send {
             background-color: #0fbf0f;
         }
-
+    
         .btn-addProblem {
             background-color: #4c4cbf;
         }
-
+    
         .btn-back {
             background-color: #f8b014;
         }
@@ -71,11 +126,9 @@
                 margin: 1rem;
                 padding: 10px;
             }
-            
             .card {
                 margin-bottom: 15px;
             }
-    
             button {
                 width: 100%;
             }
@@ -84,38 +137,43 @@
     
 </head>
 <body>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-6">
-            <div class="card">
-                <div class="card-body">
-                    <h2>Lisää uusi pakohuone:</h2>
-                    <div class="mb-3">
-                        <label for="roomTitle" class="form-label">Pakohuoneen nimi (pakollinen):</label>
-                        <input type="text" class="form-control" id="roomTitle" placeholder="Kirjoita pakohuoneen nimi tähän">
+    <header>
+        <h1>Lisää uusi pakohuone</h1>
+    </header>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Escaperooms databox -->
+                <div id="editFields">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <label for="roomTitle" class="form-label">Pakohuoneen nimi (pakollinen):</label>
+                            <input type="text" class="form-control mb-3" id="roomTitle" placeholder="Kirjoita pakohuoneen nimi tähän">
+                            
+                            <label class="form-label">Kuvaus (pakollinen):</label>
+                            <textarea class="form-control mb-3" id="roomDescription"></textarea>
+                            
+                            <label for="videoLink" class="form-label">Video Linkki:</label>
+                            <input type="text" class="form-control mb-3" id="videoLink" placeholder="URL videolle">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Kuvaus (pakollinen):</label>
-                        <textarea id="roomDescription"></textarea>
-                    </div>                    
-                    <div class="mb-3">
-                        <label for="videoLink" class="form-label">Video Linkki:</label>
-                        <input type="text" class="form-control" id="videoLink" placeholder="URL videolle">
-                    </div>
-                    <div id="problemsContainer" class="mb-3">
-                    </div>
-                    <div class="mb-3">
-                        <button type="button" id="addProblemButton" class="btn-addProblem">Lisää uusi pulma</button>
-                    </div>
-                    <div class="button-container">
-                        <button class="btn-back" id="backhomeButton">Takaisin</button>
-                        <button class="btn-send" onclick="sendNewRoom()">Lähetä</button>
-                    </div>
+                </div>
+                <!-- Problems container -->
+                <div id="problemsContainer" class="mb-3">
+                    <!-- Pulmat lisätään tänne dynaamisesti -->
+                </div>
+
+                <!-- Add problems and send-buttons -->
+                <div id="problemButtons" class="mt-4">
+                    <button type="button" id="addProblemButton" class="btn-addProblem">Lisää uusi pulma</button>
+                </div>
+                <div id="actionButtons" class="button-container mt-4">
+                    <button class="btn-back" id="backhomeButton">Takaisin</button>
+                    <button class="btn-send" onclick="sendNewRoom()">Lähetä</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 <!-- Summernote JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -127,7 +185,7 @@
     $(document).ready(function() {
         // Initialize Summernote for the escape room description
         $('#roomDescription').summernote({
-            height: 100, // set the initial height
+            height: 150, // set the initial height
             toolbar: [
                 ['style', ['bold', 'italic']],
                 ['fontsize', ['fontsize']],
@@ -152,19 +210,19 @@
 
             // Append a new problem form dynamically into the problems container
             $('#problemsContainer').append(`
-                <div class="problem mb-3">
-                    <h4>Pulma:</h4>
-                    <div class="mb-3"><label>Pulman otsikko:</label><input type="text" class="form-control problemTitle"></div>
-                    <div class="mb-3"><label>Pulman kuvaus:</label><textarea id="${problemDivID}"></textarea></div>
-                    <div class="mb-3"><label>Video Linkki:</label><input type="text" class="form-control problemVideoLink"></div>
-                    <div class="mb-3"><label>Oikea vastaus:</label><input type="text" class="form-control correctAnswer"></div>
-                    <div class="mb-3"><label>Vihje:</label><input type="text" class="form-control hint"></div>
+                <div class="problem-container">
+                    <h3>Pulma ${problemIndex + 1}:</h3>
+                    <div class="mb-3"><label class="form-label">Pulman otsikko:</label><input type="text" class="form-control problemTitle"></div>
+                    <div class="mb-3"><label class="form-label">Pulman kuvaus:</label><textarea id="${problemDivID}" class="form-control"></textarea></div>
+                    <div class="mb-3"><label class="form-label">Video Linkki:</label><input type="text" class="form-control problemVideoLink"></div>
+                    <div class="mb-3"><label class="form-label">Oikea vastaus:</label><input type="text" class="form-control correctAnswer"></div>
+                    <div class="mb-3"><label class="form-label">Vihje:</label><input type="text" class="form-control hint"></div>
                 </div>
             `);
     
             // Initialize Summernote for the newly added problem description
             $(`#${problemDivID}`).summernote({
-                height: 100,
+                height: 150,
                 toolbar: [
                     ['style', ['bold', 'italic']],
                     ['fontsize', ['fontsize']],
@@ -204,7 +262,7 @@
         }
 
         // Gather all problems data
-        const problems = $('.problem').map(function() {
+        const problems = $('.problem-container').map(function() {
             return {
                 title: $(this).find('.problemTitle').val(),
                 description: $(this).find('textarea').summernote('code'),
