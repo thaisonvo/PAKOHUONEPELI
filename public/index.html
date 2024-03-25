@@ -5,42 +5,95 @@
     <meta charset="utf8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kotisivu - Pakohuonepelit</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+        .centered-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #leaderboardTable td {
+            width: 33%;
+            text-align: center;
+        }
+        </style>
 </head>
 
 <body>
     <div class="container">
         <div class="text-content" style="text-align: center;">
-
-            <div class="mb-3">
-                <h1>Tervetuloa pakohuonepeliin!</h1>
-            </div>
-
-            <div class="mb-3">
-                <select id="allEscapeRooms">
-                    <!-- All existing escape rooms are placed here -->
-                </select>
-            </div>
-            
-            <div class="mb-3">
-                <button id="startGameButton">Aloita peli</button>
-            </div>
-
+            <h1>Tervetuloa Pakohuonepelit-sivustolle!</h1>
+            <p>Valitse alla olevasta valikosta haluamasi pakohuone ja aloita peli painamalla "Aloita peli" -nappia.</p>
+            <select id="allEscapeRooms" required>
+                <option value="" disabled selected>Valitse pakohuone</option>
+            </select>
+            <input type="text" id="playerName" placeholder="Syötä nimesi tähän..." required></input>
+            <button id="startGameButton">Aloita peli</button>
         </div>
+
+        <div class="centered-container">
+            <h2 id=leaderboardTitle></h2>
+            <table id="leaderboardTable">
+                <!-- Scores -->
+            </table>
     </div>
 
     <script>
-        async function fetchData() {
+        async function fetchEscapeRooms() {
             try {
                 const response = await fetch("/allEscapeRooms");
                 if (!response.ok) {
-                    throw new Error(`Server error: ${response.status}`);
+                    throw new Error(`Failed to retrieve escape rooms.)`);
                 }
-                const data = await response.json();
-                return data;
+                const escapeRooms = await response.json();
+                return escapeRooms;
             } catch (error) {
-                console.error("Error:", error);
-                alert("Tapahtui odottamaton virhe. Yritä myöhemmin uudelleen.");
+                console.error(error);
             }
+        }
+
+        async function initializePlayerAndStartGame(escapeRoom, playerName) {
+            try {
+                const response = await fetch('/api/initializePlayer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ escapeRoom, playerName })
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to initialize player data and start a game.');
+                }
+
+                window.location.href = "/maingamepage";
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function renderLeaderBoard(escapeRoom) {
+            const res = await fetch(`/getLeaderboardData/${escapeRoom}`);
+            const data = await res.json();
+            const leaderboardTable = document.getElementById("leaderboardTable");
+            const leaderboardTitle = document.getElementById("leaderboardTitle").innerText = `Pakohuoneen '${escapeRoom}' Top 10 nopeimmat:`;
+
+            data.forEach((player, index) => {
+                const row = document.createElement('tr');
+                const rank = document.createElement('td');
+                const name = document.createElement('td');
+                const time = document.createElement('td');
+                rank.innerText = `${index + 1}.`;
+                name.innerText = player.playerName;
+                time.innerText = `${player.time} s`;
+                row.appendChild(rank);
+                row.appendChild(name);
+                row.appendChild(time);
+                leaderboardTable.appendChild(row);
+            });
         }
 
         function renderDropdownMenu(data, id) {
@@ -48,43 +101,36 @@
             
             data.forEach(room => {
                 const option = document.createElement("option");
-                option.value = room.title;
-                option.innerText = room.title;
+                option.value = room;
+                option.innerText = room;
                 dropdownMenu.appendChild(option);
-            })
-        }
-
-        function startGame(escapeRoom) {
-            try {
-                window.location.href = `/maingamepage?escapeRoom=${encodeURIComponent(escapeRoom)}`;
-            } catch (error) {
-                console.error("Error", error);
-                alert("Tapahtui odottamaton virhe. Yritä myöhemmin uudelleen.");
-            }
+            });
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
-            const allEscapeRooms = await fetchData();
+            const allEscapeRooms = await fetchEscapeRooms();
 
             if (!allEscapeRooms) {
-                console.error("Failed to retrieve existing Escape Rooms");
                 return;
             }
 
             renderDropdownMenu(allEscapeRooms, "allEscapeRooms");
 
             const dropdownMenu = document.getElementById("allEscapeRooms");
-            let selectedEscapeRoom = dropdownMenu.value;
-
+            let selectedEscapeRoom;
             dropdownMenu.addEventListener("change", () => {
+                document.getElementById("leaderboardTable").innerHTML = "";
                 selectedEscapeRoom = dropdownMenu.value;
-            })
+                renderLeaderBoard(selectedEscapeRoom);
+            });
 
             const startGameButton = document.getElementById("startGameButton");
             startGameButton.addEventListener("click", () => {
-                startGame(selectedEscapeRoom);
-            })
-        })
+                const selectedEscapeRoom = document.getElementById("allEscapeRooms").value;
+                const playerName = document.getElementById("playerName").value;
+                initializePlayerAndStartGame(selectedEscapeRoom, playerName);
+            });
+        });
     </script>
 </body>
 </html>

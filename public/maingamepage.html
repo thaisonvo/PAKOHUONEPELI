@@ -38,27 +38,18 @@
     </div>
 
     <script>
-        // Extract the user's selected escape room from the URL.
-        const urlParams = new URLSearchParams(window.location.search);
-        const selectedRoom = urlParams.get("escapeRoom");
-
-        // If no escape room has been selected, redirect the user to the home page.
-        if (!selectedRoom) {
-            alert("Valitse ensin pakohuone!");
-            window.location.href = "/";
-        }
-
         // Fetch information about the selected escape room.
-        fetch(`/escapeRoomInfo/${selectedRoom}`)
-        .then(response => response.json())
-        .then(data => updateContent(data))
+        fetch(`/api/getIntroduction`)
+            .then(response => response.json())
+            .then(data => updateContent(data))
+            .catch(error => console.error(error));
 
         // Event listener for the 'start game' button.
         const startButton = document.getElementById("startGameButton");
         startButton.addEventListener("click", async () => {
             try {
                 // Fetch the first question of the escape room.
-                const response = await fetch("/game");
+                const response = await fetch("/api/getQuestion");
                 const data = await response.json();
 
                 // Update the content of the page.
@@ -77,7 +68,7 @@
                 // Extract the inputted answer.
                 const answer = document.getElementById("codeInput").value;
                 // Send a request to the server with the inputted answer for validation.
-                const response = await fetch("/answerSubmission", {
+                const response = await fetch("/api/checkAnswer", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -86,16 +77,20 @@
                 })
                 const data = await response.json();
 
-                // Check the response from the server.
-                if (response.status === 422) {
-                    alert(data.error);
-                    document.getElementById("codeInput").value = '';
-                    return;
+                if (data.finished) {
+                    return window.location.href = `/congratulations/?escapeRoom=${data.escapeRoom}`;
                 }
 
-                // Update the content after a correct answer.
-                updateContent(data);
-                document.getElementById("codeInput").value = '';
+                if (!data.correct) {
+                    alert("Väärä vastaus! Yritä uudelleen.");
+                    document.getElementById("codeInput").value = '';
+                    return;
+                } else {
+                    const nextQuestion = await fetch('/api/getQuestion');
+                    const nextData = await nextQuestion.json();
+                    updateContent(nextData);
+                    document.getElementById("codeInput").value = '';
+                }
             } catch (error) {
                 console.error(error);
             }
@@ -106,28 +101,30 @@
         showHint.addEventListener("click", async () => {
             try {
                 // Fetch a hint from the server.
-                const response = await fetch("/hint");
-                const hint = await response.text();
+                const response = await fetch("/api/getHint");
+                const data = await response.json();
 
                 // Display the hint in the hint window.
-                document.getElementById("modalHintText").innerText = hint;
+                document.getElementById("modalHintText").innerText = data.hint;
                 document.getElementById("hintModal").style.display = 'block';
             } catch (error) {
                 console.error(error);
             }
-        })
+        });
 
         // Event listener for closing the hint window.
         const closeHint = document.querySelector(".close");
         closeHint.addEventListener("click", () => {
             document.getElementById("hintModal").style.display = 'none';
-        })
+        });
 
         // Updates the title, description and video of the page.
         function updateContent(data) {
+            console.log('updating content')
             document.getElementById("gameTitle").innerText = data.title;
             document.getElementById("instructionsContent").innerHTML = data.description;
-            document.getElementById("escapeRoomVideo").src = `https://www.youtube.com/embed/${data.videoLink}`;
+            const video = data.video.split('v=')[1];
+            document.getElementById("escapeRoomVideo").src = `https://www.youtube.com/embed/${video}`;
         }
     </script>
 </body>
