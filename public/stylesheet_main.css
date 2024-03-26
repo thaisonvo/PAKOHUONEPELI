@@ -7,6 +7,9 @@ body {
 }
 
 .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: #0b0c10;
     height: 100px;
     grid-column: span 2; /* Make the header span across both columns */
@@ -32,6 +35,24 @@ h1 {
     padding: 5px;
     margin: 5px;
     width: 100%;
+}
+
+.timerContainer, .spacer {
+    flex-basis: 100px;
+    display: flex;
+    justify-content: center;
+}
+
+#timerDisplay {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: #daf6ff;
+    font-size: 24px;
+    text-shadow: 5px 5px 10px #66fcf1;
+    padding: 10px;
+    border: 5px;
+    display: inline-block;
+    position: absolute;
+    left: 20px;
 }
 
 .instructions {
@@ -72,7 +93,7 @@ h1 {
 }
 
 input[type="text"] {
-    width: 80%;
+    width: 90%;
     padding: 10px; 
     margin: 10px 0; 
     border: 2px solid #66fcf1;
@@ -81,12 +102,16 @@ input[type="text"] {
     background-color: #ffffff; 
 }
 
+.buttons-column {
+    flex-direction: column;
+}
+
 .buttons {
     margin: 20px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-items: space-between;
+    align-items: center;
 }
 
 button {

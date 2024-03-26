@@ -9,7 +9,11 @@
 <body>
     <div class="wrapper">
         <header class="header">
+            <div class="timerContainer">
+                <div id="timerDisplay">--:--:--</div>
+            </div>
             <h1 id="gameTitle">Tervetuloa Pakohuonepeliin!</h1>
+            <div class="spacer"></div>
         </header>
         <div class="instructions">
             <h2>Ohjeet pelaajalle:</h2>
@@ -48,6 +52,13 @@
         const startButton = document.getElementById("startGameButton");
         startButton.addEventListener("click", async () => {
             try {
+                await fetch("/api/startGame", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
                 // Fetch the first question of the escape room.
                 const response = await fetch("/api/getQuestion");
                 const data = await response.json();
@@ -56,6 +67,13 @@
                 updateContent(data);
                 document.querySelector(".buttons").style.display = "block";
                 startButton.style.display = "none";
+
+                //Starts the timer check
+                checkTime();
+
+                if (!timerInterval) {
+                    setInterval(checkTime, 60000);
+                }
             } catch (error) {
                 console.error(error);
             }
@@ -78,22 +96,39 @@
                 const data = await response.json();
 
                 if (data.finished) {
-                    return window.location.href = `/congratulations/?escapeRoom=${data.escapeRoom}`;
+                    window.location.href = `/congratulations/?escapeRoom=${data.escapeRoom}`;
+                    return;
                 }
 
                 if (!data.correct) {
                     alert("Väärä vastaus! Yritä uudelleen.");
                     document.getElementById("codeInput").value = '';
-                    return;
                 } else {
-                    const nextQuestion = await fetch('/api/getQuestion');
-                    const nextData = await nextQuestion.json();
-                    updateContent(nextData);
-                    document.getElementById("codeInput").value = '';
+                    //If answer is right and there's problems left, hide codeInput and check+hint buttons -> Show continue -button
+                    document.getElementById("continueButton").style.display = 'block';
+                    document.getElementById("codeInput").style.display = 'none';
+                    document.getElementById("checkTheCode").style.display = 'none';
+                    document.getElementById("vihje").style.display = 'none';
                 }
             } catch (error) {
                 console.error(error);
             }
+    
+
+            //The eventlistener for the continue-button
+            const continueButton = document.getElementById("continueButton");
+            continueButton.addEventListener("click", async () => {
+                const nextQuestion = await fetch('/api/getQuestion');
+                const nextData = await nextQuestion.json();
+                updateContent(nextData);
+
+                document.getElementById("codeInput").style.display = 'block';
+                document.getElementById("checkTheCode").style.display = 'inline-block';
+                document.getElementById("vihje").style.display = 'inline-block';
+                document.getElementById("continueButton").style.display = 'none';
+                document.getElementById("codeInput").value = '';
+            });
+
         })
 
         // Event listener for showing a hint.
@@ -126,6 +161,48 @@
             const video = data.video.split('v=')[1];
             document.getElementById("escapeRoomVideo").src = `https://www.youtube.com/embed/${video}`;
         }
+
+
+        let timerInterval;
+
+        //Function to check the remaining game time
+        function checkTime() {
+            //Sends a GET request to the endpoint on the server
+            fetch('/api/checkTime')
+                .then(response => response.json())
+                .then(data => {
+                    //Checks is the timeIsUp -in the response true
+                    if (data.timeIsUp) {
+                        alert("Aikasi on päättynyt!");
+                        clearInterval(timerInterval);
+                    } else {
+                        startLocalCountdown(data.timeLeft);
+                    }
+                })
+                .catch(error => console.error('Error checking time:', error));
+            }
+
+        //Calls the checkTime -function periodically in every minute
+        setInterval(checkTime, 60000); // 60 000 ms = 1min
+
+        function startLocalCountdown(timeLeftInSeconds) {
+            clearInterval(timerInterval);
+            const endTimestamp = Date.now() + timeLeftInSeconds * 1000;
+
+            timerInterval = setInterval(() => {
+                const secondsLeft = Math.round((endTimestamp - Date.now()) / 1000);
+                if (secondsLeft <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timerDisplay').textContent = "00:00:00";
+                } else {
+                    const hours = Math.floor(secondsLeft / 3600);
+                    const minutes = Math.floor((secondsLeft % 3600) / 60);
+                    const seconds = secondsLeft % 60;
+                    document.getElementById('timerDisplay').textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+
     </script>
 </body>
 </html>

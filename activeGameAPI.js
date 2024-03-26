@@ -11,11 +11,22 @@ module.exports = (activeGames, allEscapeRooms) => {
             escapeRoom: escapeRoomData.title,
             questions: escapeRoomData.problems,
             progress: 0,
-            hintsLeft: 3
+            hintsLeft: 3,
+            startTime: null
         }
 
         activeGames.set(req.session.id, player);
         res.sendStatus(201);
+    });
+
+    router.post('/startGame', (req, res) => {
+        const player = activeGames.get(req.session.id);
+        if (player) {
+            player.startTime = Date.now();
+            res.json({ started: true });
+        } else {
+            res.status(404).send('Pelaajaa ei löydy');
+        }
     });
 
     router.get('/getIntroduction', (req, res) => {
@@ -53,16 +64,55 @@ module.exports = (activeGames, allEscapeRooms) => {
         const player = activeGames.get(req.session.id);
         const { answer } = req.body;
         const currentQuestion = player.questions[player.progress];
-        
-        if (player.progress === player.questions.length - 1) {
-            return res.json({ finished: true, escapeRoom: player.escapeRoom });
-        }
 
         if (answer === currentQuestion.correctAnswer) {
             player.progress++;
-            res.json({ correct: true });
+        
+            if (player.progress === player.questions.length) {
+                //Calculating the end time of the game and the total elapsed time in milliseconds
+                const endTime = Date.now();
+                const elapsedTimeMs = endTime - player.startTime;
+
+                //Convert the elapsed time into hours, minutes and seconds
+                const seconds = Math.floor((elapsedTimeMs / 1000) % 60);
+                const minutes = Math.floor((elapsedTimeMs / (1000 * 60)) % 60);
+                const hours = Math.floor((elapsedTimeMs / (1000 * 60 * 60)) % 24);
+
+                //Format the elapsed time as a string in the format HH:MM:SS
+                const elapsedTimeString = [hours, minutes, seconds]
+                .map(unit => unit.toString().padStart(2, '0'))
+                .join(':');
+
+                //Store the formatted elapsed time in the player's session data
+                player.elapsedTime = elapsedTimeString;
+
+                //Respond to the client indicating the game is finished and include the escape room identifier
+                return res.json({ finished: true, escapeRoom: player.escapeRoom });
+            } else {
+                //If the game is not yet finished, respond indicating the answer was correct
+                res.json({ correct: true });
+            }
         } else {
+            // ...and if the submitted answer is incorrect, respond indicating the answer was incorrect
             res.json({ correct: false });
+        }
+    });
+
+    router.get('/checkTime', (req, res) => {
+        const player = activeGames.get(req.session.id);
+        if (!player) {
+            return res.status(404).send('Pelaajaa ei löydy');
+        }
+        
+        const timePassed = Math.floor((Date.now() - player.startTime) / 1000); // Time in seconds
+        const timeLeft = (60 * 90) - timePassed; // Gametime 1h30min
+    
+        if (timeLeft <= 0) {
+            // When time is over
+            res.json({ timeIsUp: true });
+        } else {
+            // When there's still time left, check it constantly
+            res.json({ timeIsUp: false, timeLeft: timeLeft });
         }
     });
 
