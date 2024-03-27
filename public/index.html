@@ -1,45 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kotisivu - Pakohuonepelit</title>
-    <style>
-        body {
-            background-color: black;
-            color: white;
-        }
-        .centered-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        #leaderboardTable td {
-            width: 33%;
-            text-align: center;
-        }
-        </style>
+    <link rel="stylesheet" href="stylegameIndex.css">
 </head>
-
 <body>
-    <div class="container">
-        <div class="text-content" style="text-align: center;">
-            <h1>Tervetuloa Pakohuonepelit-sivustolle!</h1>
-            <p>Valitse alla olevasta valikosta haluamasi pakohuone ja aloita peli painamalla "Aloita peli" -nappia.</p>
-            <select id="allEscapeRooms" required>
-                <option value="" disabled selected>Valitse pakohuone</option>
-            </select>
-            <input type="text" id="playerName" placeholder="Syötä nimesi tähän..." required></input>
-            <button id="startGameButton">Aloita peli</button>
+    <div class="hero-section">
+        <h1 class="title">Tervetuloa Pakohuonepeliin!</h1>
+        <div class="box-container">
+            <div class="game-selection">
+                <select id="allEscapeRooms" required>
+                    <option value="" disabled selected>Valitse pakohuone</option>
+                    <!-- Other options here -->
+                </select>
+                <input type="text" id="playerName" placeholder="Syötä nimesi tähän..." required>
+                <button id="startGameButton">Aloita peli</button>
+            </div>
+            <div class="leaderboard">
+                <h2 id="leaderboardTitle"></h2>
+                <table id="leaderboardTable">
+                    <!-- Scores will be populated here -->
+                </table>
+            </div>
         </div>
-
-        <div class="centered-container">
-            <h2 id=leaderboardTitle></h2>
-            <table id="leaderboardTable">
-                <!-- Scores -->
-            </table>
     </div>
 
     <script>
