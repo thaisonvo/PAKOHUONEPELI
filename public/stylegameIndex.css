@@ -41,6 +41,7 @@ body, html {
     color: #ffffff;
     font-size: 58px;
     font-family: Arial, Helvetica, sans-serif;
+    top: -24px;
 }
 
 .box-container {
