@@ -77,7 +77,7 @@
             } catch (error) {
                 console.error(error);
             }
-        })
+        });
 
         // Event listener for handling answer submissions.
         const submitAnswer = document.getElementById("checkTheCode");
@@ -128,8 +128,7 @@
                 document.getElementById("continueButton").style.display = 'none';
                 document.getElementById("codeInput").value = '';
             });
-
-        })
+        });
 
         // Event listener for showing a hint.
         const showHint = document.getElementById("vihje");

@@ -17,7 +17,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         secure: false,
-        maxAge: 2 * 60 * 60 * 1000, // Session expires in 2 hours
+        maxAge: 3 * 60 * 60 * 1000, // Session expires in 2 hours
         httpOnly: true
     }
 }));
@@ -58,6 +58,35 @@ app.get('/getLeaderboardData/:escapeRoom', (req, res) => {
             const top10Players = leaderboardData.slice(0, 10);
             res.json(top10Players);
         }
+    });
+});
+
+app.get('/writeScore', (req, res) => {
+    const player = activeGames.get(req.session.id);
+
+    fs.readFile('leaderboard.json', 'utf8', (err, data) => {
+        if (err) {
+            return res.sendStatus(500);
+        }
+
+        const leaderboard = JSON.parse(data);
+        const leaderboardData = leaderboard[player.escapeRoom];
+
+        leaderboardData.push({
+            playerName: player.name,
+            time: player.elapsedTime
+        });
+
+        leaderboardData.sort((a, b) => a.time - b.time);
+
+        fs.writeFile('leaderboard.json', JSON.stringify(leaderboard, null, 2), 'utf8', err => {
+            if (err) {
+                return res.sendStatus(500);
+            }
+            
+            const rank = leaderboardData.findIndex(p => p.playerName === player.name) + 1
+            res.json({ rank });
+        });
     });
 });
 
@@ -220,3 +249,12 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`\nServer is running on http://localhost:${port}`);
 });
+
+function validateUser(req, res, next) {
+    const user = activeGames.get(req.session.id);
+    if (user && user.active) {
+        next();
+    } else {
+        return res.redirect('/');
+    }
+}

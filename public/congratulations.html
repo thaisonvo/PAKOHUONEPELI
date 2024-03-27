@@ -5,12 +5,12 @@
         body {
             background-color: black;
             color: white;
+        }
+        .container {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
+            justify-content: center;
         }
         table {
             border-collapse: collapse;
@@ -25,19 +25,52 @@
             background-color: #4CAF50;
             color: white;
         }
+        h2 {
+            text-align: center;
+            color: white;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            font-size: 20px;
+            margin-top: 24px;
+        }
     </style>
 </head>
 <body>
-    <table id="leaderboardTable">
-        <tr>
-            <th>Sija</th>
-            <th>Pelaajan nimi</th>
-            <th>Aika</th>
-        </tr>
-        <!-- Player rows will be added here -->
-    </table>
+    <div class="container">
+        <h2>Onneksi olkoon, pääsit pakohuonepelin läpi!</h2>
+        <h3 id="ranking"></h3>
+
+        <table id="leaderboardTable">
+            <tr>
+                <th>Sija</th>
+                <th>Pelaajan nimi</th>
+                <th>Aika</th>
+            </tr>
+            <!-- Player rows will be added here -->
+        </table>
+
+        <a href="/" class="button">Palaa takaisin etusivulle</a>
+    </div>
 
     <script>
+        const writeScore = async () => {
+            try {
+                const response = await fetch('/writeScore');
+                const data = await response.json();
+                return data.rank;
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
         async function fetchLeaderboard() {
             try {
                 const params = new URLSearchParams(window.location.search);
@@ -63,14 +96,24 @@
                 const rankCell = row.insertCell(0);
                 const nameCell = row.insertCell(1);
                 const timeCell = row.insertCell(2);
-                rankCell.textContent = rank;
+                rankCell.textContent = `${rank}.`;
                 nameCell.textContent = player.playerName;
                 timeCell.textContent = player.time;
                 rank++;
             });
         }
 
-        updateLeaderboard();
+        async function main() {
+            try {
+                const rank = await writeScore();
+                document.getElementById("ranking").textContent = `Sijoitut aikasi perusteella sijalle ${rank}!`;
+                updateLeaderboard();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        main();
     </script>
 </body>
 </html>

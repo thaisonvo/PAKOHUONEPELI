@@ -1,86 +1,154 @@
 {
-    "Escape Room 1": [
-        {
-            "playerName": "Player 1",
-            "time": "100"
-        },
-        {
-            "playerName": "Player 2",
-            "time": "200"
-        },
-        {
-            "playerName": "Player 3",
-            "time": "300"
-        },
-        {
-            "playerName": "Player 4",
-            "time": "400"
-        },
-        {
-            "playerName": "Player 5",
-            "time": "500"
-        },
-        {
-            "playerName": "Player 6",
-            "time": "600"
-        },
-        {
-            "playerName": "Player 7",
-            "time": "700"
-        },
-        {
-            "playerName": "Player 8",
-            "time": "800"
-        },
-        {
-            "playerName": "Player 9",
-            "time": "900"
-        },
-        {
-            "playerName": "Player 10",
-            "time": "1000"
-        }
-    ],
-    "TestiPakohuone": [
-        {
-            "playerName": "Player 1",
-            "time": "100"
-        },
-        {
-            "playerName": "Player 2",
-            "time": "200"
-        },
-        {
-            "playerName": "Player 3",
-            "time": "300"
-        },
-        {
-            "playerName": "Player 4",
-            "time": "400"
-        },
-        {
-            "playerName": "Player 5",
-            "time": "500"
-        },
-        {
-            "playerName": "Player 6",
-            "time": "600"
-        },
-        {
-            "playerName": "Player 7",
-            "time": "700"
-        },
-        {
-            "playerName": "Player 8",
-            "time": "800"
-        },
-        {
-            "playerName": "Player 9",
-            "time": "900"
-        },
-        {
-            "playerName": "Player 10",
-            "time": "1000"
-        }
-    ]
+  "Escape Room 1": [
+    {
+      "playerName": "asd",
+      "time": 3
+    },
+    {
+      "playerName": "asd",
+      "time": 3
+    },
+    {
+      "playerName": "asd",
+      "time": 3
+    },
+    {
+      "playerName": "asd",
+      "time": 3
+    },
+    {
+      "playerName": "asd",
+      "time": 3
+    },
+    {
+      "playerName": "asdasd",
+      "time": 3
+    },
+    {
+      "playerName": "asdasd",
+      "time": 3
+    },
+    {
+      "playerName": "asd",
+      "time": 3
+    },
+    {
+      "playerName": "asdasd",
+      "time": 3
+    },
+    {
+      "playerName": "test",
+      "time": 3
+    },
+    {
+      "playerName": "UNO",
+      "time": 4
+    },
+    {
+      "playerName": "asd",
+      "time": 4
+    },
+    {
+      "playerName": "JASDIAJISD",
+      "time": 4
+    },
+    {
+      "playerName": "hammer",
+      "time": 4
+    },
+    {
+      "playerName": "jas",
+      "time": 4
+    },
+    {
+      "playerName": "asd",
+      "time": 4
+    },
+    {
+      "playerName": "HORSE",
+      "time": 4
+    },
+    {
+      "playerName": "ASDADA",
+      "time": 4
+    },
+    {
+      "playerName": "TESTI",
+      "time": 4
+    },
+    {
+      "playerName": "asdasd",
+      "time": 6
+    },
+    {
+      "playerName": "asd",
+      "time": 9
+    },
+    {
+      "playerName": "asdasd",
+      "time": 11
+    }
+  ],
+  "TestiPakohuone": [
+    {
+      "playerName": "N1 SEMEN",
+      "time": 9
+    },
+    {
+      "playerName": "FLASH",
+      "time": 11
+    },
+    {
+      "playerName": "JHORSE",
+      "time": 12
+    },
+    {
+      "playerName": "VROOOM",
+      "time": 13
+    },
+    {
+      "playerName": "CARGOFAST",
+      "time": 13
+    },
+    {
+      "playerName": "asd",
+      "time": 15
+    },
+    {
+      "playerName": "asdasdasd",
+      "time": 17
+    },
+    {
+      "playerName": "AAAAAAAAA",
+      "time": 19
+    },
+    {
+      "playerName": "asdasd",
+      "time": 19
+    },
+    {
+      "playerName": "MONGOLIA",
+      "time": 25
+    },
+    {
+      "playerName": "HORSIE",
+      "time": 52
+    },
+    {
+      "playerName": "Player 1",
+      "time": 100
+    },
+    {
+      "playerName": "Player 2",
+      "time": 200
+    },
+    {
+      "playerName": "Player 3",
+      "time": 300
+    },
+    {
+      "playerName": "Player 4",
+      "time": 400
+    }
+  ]
 }

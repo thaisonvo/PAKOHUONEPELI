@@ -12,7 +12,8 @@ module.exports = (activeGames, allEscapeRooms) => {
             questions: escapeRoomData.problems,
             progress: 0,
             hintsLeft: 3,
-            startTime: null
+            startTime: null,
+            active: true
         }
 
         activeGames.set(req.session.id, player);
@@ -84,8 +85,8 @@ module.exports = (activeGames, allEscapeRooms) => {
                 .join(':');
 
                 //Store the formatted elapsed time in the player's session data
-                player.elapsedTime = elapsedTimeString;
-
+                player.elapsedTime = Math.round(elapsedTimeMs / 1000);
+                player.active = false;
                 //Respond to the client indicating the game is finished and include the escape room identifier
                 return res.json({ finished: true, escapeRoom: player.escapeRoom });
             } else {
