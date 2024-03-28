@@ -10,7 +10,7 @@
     <div class="wrapper">
         <header class="header">
             <div class="timerContainer">
-                <div id="timerDisplay">--:--:--</div>
+                <div id="timerDisplay">01:30:00</div>
             </div>
             <h1 id="gameTitle">Tervetuloa Pakohuonepeliin!</h1>
             <div class="spacer"></div>
@@ -43,16 +43,19 @@
 
     <script>
         // Fetch information about the selected escape room.
-        fetch(`/api/getIntroduction`)
+        fetch(`/api/game/getIntroduction`)
             .then(response => response.json())
             .then(data => updateContent(data))
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(error);
+                window.location.href = '/';
+            });
 
         // Event listener for the 'start game' button.
         const startButton = document.getElementById("startGameButton");
         startButton.addEventListener("click", async () => {
             try {
-                await fetch("/api/startGame", {
+                await fetch("/api/game/startGame", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -60,7 +63,7 @@
                 });
                 
                 // Fetch the first question of the escape room.
-                const response = await fetch("/api/getQuestion");
+                const response = await fetch("/api/game/getQuestion");
                 const data = await response.json();
 
                 // Update the content of the page.
@@ -86,7 +89,7 @@
                 // Extract the inputted answer.
                 const answer = document.getElementById("codeInput").value;
                 // Send a request to the server with the inputted answer for validation.
-                const response = await fetch("/api/checkAnswer", {
+                const response = await fetch("/api/game/checkAnswer", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -114,11 +117,10 @@
                 console.error(error);
             }
     
-
             //The eventlistener for the continue-button
             const continueButton = document.getElementById("continueButton");
             continueButton.addEventListener("click", async () => {
-                const nextQuestion = await fetch('/api/getQuestion');
+                const nextQuestion = await fetch('/api/game/getQuestion');
                 const nextData = await nextQuestion.json();
                 updateContent(nextData);
 
@@ -135,7 +137,7 @@
         showHint.addEventListener("click", async () => {
             try {
                 // Fetch a hint from the server.
-                const response = await fetch("/api/getHint");
+                const response = await fetch("/api/game/getHint");
                 const data = await response.json();
 
                 // Display the hint in the hint window.
@@ -167,7 +169,7 @@
         //Function to check the remaining game time
         function checkTime() {
             //Sends a GET request to the endpoint on the server
-            fetch('/api/checkTime')
+            fetch('/api/game/checkTime')
                 .then(response => response.json())
                 .then(data => {
                     //Checks is the timeIsUp -in the response true

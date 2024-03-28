@@ -101,7 +101,7 @@
     <script>
         const writeScore = async () => {
             try {
-                const response = await fetch('/writeScore');
+                const response = await fetch('/api/game/writeScore');
                 const data = await response.json();
                 return data.rank;
             } catch (err) {
@@ -114,7 +114,7 @@
                 const params = new URLSearchParams(window.location.search);
                 const escapeRoom = params.get("escapeRoom");
 
-                const response = await fetch(`/getLeaderboardData/${escapeRoom}`);
+                const response = await fetch(`/api/public/leaderboard?escapeRoom=${escapeRoom}`);
                 if (!response.ok) {
                     throw new Error(`Failed to retrieve leaderboard.`);
                 }

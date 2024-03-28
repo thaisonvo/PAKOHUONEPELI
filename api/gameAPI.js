@@ -1,5 +1,6 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
+const fs = require('fs').promises;
+const path = require('path');
 
 module.exports = (activeGames, allEscapeRooms) => {
     router.post('/initializePlayer', (req, res) => {
@@ -66,7 +67,10 @@ module.exports = (activeGames, allEscapeRooms) => {
         const { answer } = req.body;
         const currentQuestion = player.questions[player.progress];
 
-        if (answer === currentQuestion.correctAnswer) {
+        const ans = answer.replace(/\s/g, '').toLowerCase();
+        const correct = currentQuestion.correctAnswer.replace(/\s/g, '').toLowerCase();
+
+        if (ans === correct) {
             player.progress++;
         
             if (player.progress === player.questions.length) {
@@ -85,8 +89,11 @@ module.exports = (activeGames, allEscapeRooms) => {
                 .join(':');
 
                 //Store the formatted elapsed time in the player's session data
-                player.elapsedTime = Math.round(elapsedTimeMs / 1000);
+                player.elapsedTime = elapsedTimeString;
+                player.elapsedTimeMs = elapsedTimeMs;
+
                 player.active = false;
+
                 //Respond to the client indicating the game is finished and include the escape room identifier
                 return res.json({ finished: true, escapeRoom: player.escapeRoom });
             } else {
@@ -114,6 +121,31 @@ module.exports = (activeGames, allEscapeRooms) => {
         } else {
             // When there's still time left, check it constantly
             res.json({ timeIsUp: false, timeLeft: timeLeft });
+        }
+    });
+
+    router.get('/writeScore', async (req, res) => {
+        try {
+            const player = activeGames.get(req.session.id);
+            const data = await fs.readFile(path.join(__dirname, '..', 'leaderboard.json'), 'utf8');
+            const leaderboard = JSON.parse(data);
+            const leaderboardData = leaderboard[player.escapeRoom];
+
+            leaderboardData.push({
+                playerName: player.name,
+                time: player.elapsedTime,
+                ms: player.elapsedTimeMs
+            });
+
+            leaderboardData.sort((a, b) => a.ms - b.ms);
+
+            await fs.writeFile(path.join(__dirname, '..', 'leaderboard.json'), JSON.stringify(leaderboard, null, 2), 'utf8');
+            const rank = leaderboardData.findIndex(p => p.playerName === player.name) + 1;
+            res.json({ rank });
+            activeGames.delete(req.session.id);
+        } catch (err) {
+            res.sendStatus(500);
+            console.error(err);
         }
     });
 

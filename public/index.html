@@ -30,20 +30,20 @@
     <script>
         async function fetchEscapeRooms() {
             try {
-                const response = await fetch("/allEscapeRooms");
+                const response = await fetch('/api/public/escapeRooms');
                 if (!response.ok) {
                     throw new Error(`Failed to retrieve escape rooms.)`);
                 }
                 const escapeRooms = await response.json();
                 return escapeRooms;
             } catch (error) {
-                console.error(error);
+                console.error(error); 
             }
         }
 
         async function initializePlayerAndStartGame(escapeRoom, playerName) {
             try {
-                const response = await fetch('/api/initializePlayer', {
+                const response = await fetch('/api/game/initializePlayer', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -61,7 +61,7 @@
         }
 
         async function renderLeaderBoard(escapeRoom) {
-            const res = await fetch(`/getLeaderboardData/${escapeRoom}`);
+            const res = await fetch(`/api/public/leaderboard?escapeRoom=${escapeRoom}`);
             const data = await res.json();
             const leaderboardTable = document.getElementById("leaderboardTable");
             const leaderboardTitle = document.getElementById("leaderboardTitle").innerText = `Pakohuoneen '${escapeRoom}' Top 10 nopeimmat:`;
@@ -73,7 +73,7 @@
                 const time = document.createElement('td');
                 rank.innerText = `${index + 1}.`;
                 name.innerText = player.playerName;
-                time.innerText = `${player.time} s`;
+                time.innerText = player.time;
                 row.appendChild(rank);
                 row.appendChild(name);
                 row.appendChild(time);

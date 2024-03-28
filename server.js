@@ -3,9 +3,7 @@ const session = require("express-session");
 const fs = require("fs");
 const path = require('path');
 
-const allEscapeRooms = require("./allEscapeRooms.json");
-const activeGameAPI = require("./activeGameAPI");
-
+const allEscapeRooms = require('./allEscapeRooms.json');
 const app = express();
 
 app.use(express.json());
@@ -17,7 +15,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         secure: false,
-        maxAge: 3 * 60 * 60 * 1000, // Session expires in 2 hours
+        maxAge: 4 * 60 * 60 * 1000, // Session expires in 4 hours
         httpOnly: true
     }
 }));
@@ -25,70 +23,9 @@ app.use(session({
 // The map where all active games are stored.
 let activeGames = new Map();
 
-// Endpoint to serve the main game page.
-app.get("/maingamepage", (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'maingamepage.html'));
-});
-
-app.get("/congratulations", (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'congratulations.html'));
-});
-
-app.use('/api', activeGameAPI(activeGames, allEscapeRooms));
-
-app.get("/allEscapeRooms", (req, res) => {
-    fs.readFile("allEscapeRooms.json", "utf8", (err, data) => {
-        if (err) {
-            return res.sendStatus(500);
-        } else {
-            const rooms = JSON.parse(data);
-            res.json(rooms.map(room => room.title));
-        }
-    });
-});
-
-app.get('/getLeaderboardData/:escapeRoom', (req, res) => {
-    const { escapeRoom } = req.params;
-
-    fs.readFile("leaderboard.json", "utf8", (err, data) => {
-        if (err) {
-            return res.sendStatus(500);
-        } else {
-            const leaderboardData = JSON.parse(data)[escapeRoom];
-            const top10Players = leaderboardData.slice(0, 10);
-            res.json(top10Players);
-        }
-    });
-});
-
-app.get('/writeScore', (req, res) => {
-    const player = activeGames.get(req.session.id);
-
-    fs.readFile('leaderboard.json', 'utf8', (err, data) => {
-        if (err) {
-            return res.sendStatus(500);
-        }
-
-        const leaderboard = JSON.parse(data);
-        const leaderboardData = leaderboard[player.escapeRoom];
-
-        leaderboardData.push({
-            playerName: player.name,
-            time: player.elapsedTime
-        });
-
-        leaderboardData.sort((a, b) => a.time - b.time);
-
-        fs.writeFile('leaderboard.json', JSON.stringify(leaderboard, null, 2), 'utf8', err => {
-            if (err) {
-                return res.sendStatus(500);
-            }
-            
-            const rank = leaderboardData.findIndex(p => p.playerName === player.name) + 1
-            res.json({ rank });
-        });
-    });
-});
+app.use('/', require('./pageRoutes'));
+app.use('/api/public', require('./api/publicDataAPI'));
+app.use('/api/game', require('./api/gameAPI')(activeGames, allEscapeRooms));
 
 app.get('/admin/home', (req, res) => {
     const indexPath = path.join(__dirname, 'private', 'indexAdmin.html');

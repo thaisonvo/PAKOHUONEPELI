@@ -8,3 +8,4 @@ package-lock.json
 
 # Operating System Files
 .DS_Store
+leaderboard.json

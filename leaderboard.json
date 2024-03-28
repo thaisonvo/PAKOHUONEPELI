@@ -1,174 +1,41 @@
 {
   "Escape Room 1": [
     {
-      "playerName": "asd",
-      "time": 3
+      "playerName": "Matti",
+      "time": "00:00:00",
+      "ms": 1283
+    },
+    {
+      "playerName": "ASDDDDDDD",
+      "time": "00:00:03",
+      "ms": 3952
     },
     {
       "playerName": "asd",
-      "time": 3
+      "time": "00:00:04",
+      "ms": 4336
     },
     {
       "playerName": "asd",
-      "time": 3
+      "time": "00:00:06",
+      "ms": 6604
     },
     {
-      "playerName": "asd",
-      "time": 3
-    },
-    {
-      "playerName": "asd",
-      "time": 3
-    },
-    {
-      "playerName": "asdasd",
-      "time": 3
-    },
-    {
-      "playerName": "asdasd",
-      "time": 3
-    },
-    {
-      "playerName": "asd",
-      "time": 3
-    },
-    {
-      "playerName": "asdasd",
-      "time": 3
-    },
-    {
-      "playerName": "test",
-      "time": 3
-    },
-    {
-      "playerName": "UNO",
-      "time": 4
-    },
-    {
-      "playerName": "asd",
-      "time": 4
-    },
-    {
-      "playerName": "JASDIAJISD",
-      "time": 4
-    },
-    {
-      "playerName": "hammer",
-      "time": 4
-    },
-    {
-      "playerName": "jas",
-      "time": 4
-    },
-    {
-      "playerName": "asd",
-      "time": 4
-    },
-    {
-      "playerName": "HORSE",
-      "time": 4
-    },
-    {
-      "playerName": "ASDADA",
-      "time": 4
-    },
-    {
-      "playerName": "TESTI",
-      "time": 4
-    },
-    {
-      "playerName": "asdasd",
-      "time": 6
-    },
-    {
-      "playerName": "yo",
-      "time": 8
-    },
-    {
-      "playerName": "asd",
-      "time": 9
-    },
-    {
-      "playerName": "asdasd",
-      "time": 11
-    },
-    {
-      "playerName": "yoyo",
-      "time": 11
-    },
-    {
-      "playerName": "JustMe",
-      "time": 25
-    },
-    {
-      "playerName": "it me",
-      "time": 39
+      "playerName": "TESTING",
+      "time": "00:00:36",
+      "ms": 36935
     }
   ],
   "TestiPakohuone": [
     {
-      "playerName": "N1 SEMEN",
-      "time": 9
+      "playerName": "sdfsdf",
+      "time": "00:00:11",
+      "ms": 11389
     },
     {
-      "playerName": "FLASH",
-      "time": 11
-    },
-    {
-      "playerName": "JHORSE",
-      "time": 12
-    },
-    {
-      "playerName": "VROOOM",
-      "time": 13
-    },
-    {
-      "playerName": "CARGOFAST",
-      "time": 13
-    },
-    {
-      "playerName": "asd",
-      "time": 15
-    },
-    {
-      "playerName": "asdasdasd",
-      "time": 17
-    },
-    {
-      "playerName": "AAAAAAAAA",
-      "time": 19
-    },
-    {
-      "playerName": "asdasd",
-      "time": 19
-    },
-    {
-      "playerName": "MONGOLIA",
-      "time": 25
-    },
-    {
-      "playerName": "yoyo",
-      "time": 31
-    },
-    {
-      "playerName": "HORSIE",
-      "time": 52
-    },
-    {
-      "playerName": "Player 1",
-      "time": 100
-    },
-    {
-      "playerName": "Player 2",
-      "time": 200
-    },
-    {
-      "playerName": "Player 3",
-      "time": 300
-    },
-    {
-      "playerName": "Player 4",
-      "time": 400
+      "playerName": "TESTING",
+      "time": "00:00:18",
+      "ms": 18650
     }
   ]
 }
