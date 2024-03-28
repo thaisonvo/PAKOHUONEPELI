@@ -81,12 +81,28 @@
       "time": 6
     },
     {
+      "playerName": "yo",
+      "time": 8
+    },
+    {
       "playerName": "asd",
       "time": 9
     },
     {
       "playerName": "asdasd",
       "time": 11
+    },
+    {
+      "playerName": "yoyo",
+      "time": 11
+    },
+    {
+      "playerName": "JustMe",
+      "time": 25
+    },
+    {
+      "playerName": "it me",
+      "time": 39
     }
   ],
   "TestiPakohuone": [
@@ -129,6 +145,10 @@
     {
       "playerName": "MONGOLIA",
       "time": 25
+    },
+    {
+      "playerName": "yoyo",
+      "time": 31
     },
     {
       "playerName": "HORSIE",

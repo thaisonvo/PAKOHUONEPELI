@@ -2,7 +2,7 @@ body {
     background-color: #0b0c10;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     text-align: center;
-    margin: 0; /* Removing default marginals */
+    margin: 0;
     overflow-x: hidden;
 }
 
@@ -16,12 +16,31 @@ body {
 }
 
 h1 {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-variant: small-caps;
-    text-shadow: 5px 5px 10px #66fcf1;
-    font-size: 40px;
-    color: #66fcf1;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 52px;
+    color: #5adcd3;
     font-weight: bold;
+    text-shadow: 0 0 20px #66fcf1,
+                 2px 2px 0 #0b0c10;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 20px 0;
+}
+
+@keyframes pulse {
+    0% {
+        text-shadow: 0 0 8px #66fcf1, 2px 2px 0 #0b0c10;
+    }
+    50% {
+        text-shadow: 0 0 20px #66fcf1, 2px 2px 0 #0b0c10;
+    }
+    100% {
+        text-shadow: 0 0 8px #66fcf1, 2px 2px 0 #0b0c10;
+    }
+}
+
+h1 {
+    animation: pulse 2s infinite ease-in-out;
 }
 
 .wrapper {
@@ -56,12 +75,12 @@ h1 {
 }
 
 .instructions {
-    background-color: #439d99;
+    background: #06636d;
     width: 100%;
     height: 450px;
     padding: 10px;
     margin: 10px;
-    box-shadow: 6px 7px #367f7c;
+    box-shadow: 6px 7px #044a52;
     box-sizing: border-box;
 }
 
@@ -83,23 +102,48 @@ h1 {
 }
 
 .footer {
-    background-color: #1f2833;
+    background-color: #0b0c10;
     height: 150px;
     grid-column: span 2; /* Make the footer span across both columns */
     display: flex;
     flex-direction: row;
     justify-content: center;
     overflow-x: hidden;
+    align-items: center;
 }
 
 input[type="text"] {
     width: 90%;
     padding: 10px; 
     margin: 10px 0; 
-    border: 2px solid #66fcf1;
+    border: 2px solid #055e68;
     border-radius: 5px; 
     color: black; 
-    background-color: #ffffff; 
+    background-color: #ffffff;
+    transition: border-color 0.3s, box-shadow 0.3s; 
+
+    &:focus {
+        border-color: #66fcf1;
+        box-shadow: 0 0 0 3px rgba(0, 173, 181, 0.25);
+        outline: none;
+    }
+}
+
+#startGameButton {
+    padding: 20px;
+    font-size: 20px; 
+    color: #ffffff; 
+    background-color: #055e68; 
+    border: none; 
+    border-radius: 7px;
+    cursor: pointer; 
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.6);
+}
+
+#startGameButton:hover {
+    background-color: #097f8c;
+    box-shadow: 0 0 12px 0 rgba(9, 127, 140, 0.8);
 }
 
 .buttons-column {
@@ -111,20 +155,30 @@ input[type="text"] {
     display: flex;
     flex-direction: row;
     align-items: center;
-    align-items: center;
 }
 
 button {
     padding: 15px;
     margin: 5px;
     font-size: 18px;
-    color: #66fcf1;
+    color: #ffffff;
     cursor: pointer;
     border-radius: 7px;
     border-style: solid;
-    border-color: #66fcf1;
-    background-color: #1f2833;
-    transition: background-color 0.3s;
+    border: 2px solid #055e68;
+    background-color: #055e68;
+    transition: background-color 0.3s, transform 0.3s;
+
+    &:hover {
+        background-color: #097f8c;
+        transform: translateY(-2px);
+    }
+
+    
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+    }
 }
 
 #continueButton {
@@ -132,9 +186,21 @@ button {
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: #66fcf1;
+    color: #ffffff;
     cursor: pointer;
     border-radius: 7px;
+    background-color: #055e68;
+
+    &:hover {
+        background-color: #097f8c;
+        transform: translateY(-2px);
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+    }
+    
 }
 
 .hintVisual {
@@ -146,43 +212,43 @@ button {
 }
 
 .modal {
-    display: none; /* Piilotettu oletuksena */
-    position: fixed; /* Pysyy paikallaan sivun vierityksen aikana */
-    z-index: 1; /* Sijaitsee muiden elementtien päällä */
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
     left: 0;
     top: 0;
-    width: 100%; /* Leveys */
-    height: 100%; /* Korkeus */
-    overflow: auto; /* Mahdollistaa vierityksen, jos tarpeen */
-    background-color: rgb(0,0,0); /* Taustaväri */
-    background-color: rgba(0,0,0,0.4); /* Musta, läpinäkyvyys */
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
 }
 
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto; /* 15% ylhäältä ja keskitetty */
+    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* 80% sivun leveydestä */
-    position: relative; /* Lisätty, jotta sisällön sijaintia voidaan säätää */
+    width: 80%;
+    position: relative; 
 }
 
 .close, .minimize {
     color: #aaa;
-    float: right; /* Tämä rivi voidaan poistaa, jos käytämme position:absolute; */
+    float: right;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
-    position: absolute; /* Absoluuttinen sijainti suhteessa .modal-content:iin */
-    top: 5px; /* Sijainti yläreunasta */
+    position: absolute;
+    top: 5px; 
 }
 
 .close {
-    right: 5px; /* Sijainti oikeasta reunasta */
+    right: 5px;
 }
 
 .minimize {
-    right: 40px; /* Sijainti hieman vasemmalle sulkemisnapista */
+    right: 40px;
 }
 
 
