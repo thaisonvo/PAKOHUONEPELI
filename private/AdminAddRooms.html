@@ -73,11 +73,11 @@
             margin-bottom: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border: solid 1px #aaaaaa
+            border: solid 1px #b0b0b0
         }
 
         .note-editable {
-            background-color: #fdfdfd; 
+            background-color: #dfdfdf; 
         }
     
         .card {
@@ -187,6 +187,7 @@
         // Initialize Summernote for the escape room description
         $('#roomDescription').summernote({
             height: 150, // set the initial height
+            placeholder: 'You may want to use brighter text colors to make sure they appear in the game.',
             toolbar: [
                 ['style', ['bold', 'italic']],
                 ['fontsize', ['fontsize']],
@@ -224,6 +225,7 @@
             // Initialize Summernote for the newly added problem description
             $(`#${problemDivID}`).summernote({
                 height: 150,
+                placeholder: 'You may want to use brighter text colors to make sure they appear in the game.',
                 toolbar: [
                     ['style', ['bold', 'italic']],
                     ['fontsize', ['fontsize']],

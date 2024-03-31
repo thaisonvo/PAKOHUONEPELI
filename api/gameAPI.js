@@ -62,6 +62,11 @@ module.exports = (activeGames, allEscapeRooms) => {
         }
     });
 
+    router.get('/hintCount', (req, res) => {
+        const player = activeGames.get(req.session.id);
+        res.json({ hintsLeft: player.hintsLeft });
+    });
+
     router.post('/checkAnswer', (req, res) => {
         const player = activeGames.get(req.session.id);
         const { answer } = req.body;

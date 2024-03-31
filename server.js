@@ -75,7 +75,27 @@ app.post("/escapeRoom", (req, res) => {
                 res.status(500).send("Error saving new escape room");
                 return;
             }
-            res.status(201).json({message: "Escape room added successfully"});
+
+            // After successfully adding the new room, update leaderboard.json
+            fs.readFile("leaderboard.json", "utf8", (err, leaderboardData) => {
+                if (err) {
+                    res.status(500).send("Error reading leaderboard data");
+                    return;
+                }
+                const leaderboard = JSON.parse(leaderboardData);
+                
+                // Add new room to leaderboard with an empty array
+                leaderboard[newRoom.title] = [];
+
+                // Write updated leaderboard back to the file
+                fs.writeFile("leaderboard.json", JSON.stringify(leaderboard, null, 2), "utf8", err => {
+                    if (err) {
+                        res.status(500).send("Error updating leaderboard");
+                        return;
+                    }
+                    res.status(201).json({message: "Escape room and leaderboard updated succesfully"});
+                });
+            });
         });
     });
 });
@@ -109,7 +129,30 @@ app.post("/escapeRoom/delete", (req, res) => {
                 res.status(500).send("Error saving the updated escape rooms list");
                 return;
             }
-            res.json({message: "Escape room deleted successfully"});
+            // After successfully deleting the room, update leaderboard.json
+            fs.readFile("leaderboard.json", "utf8", (err, leaderboardData) => {
+                if (err) {
+                    res.status(500).send("Error reading leaderboard data");
+                    return;
+                }
+                let leaderboard = JSON.parse(leaderboardData);
+                
+                // Check if the room exists in the leaderboard and delete it
+                if (leaderboard[title]) {
+                    delete leaderboard[title]; // Remove the room from leaderboard
+
+                    // Write the updated leaderboard back to the file
+                    fs.writeFile("leaderboard.json", JSON.stringify(leaderboard, null, 2), "utf8", err => {
+                        if (err) {
+                            res.status(500).send("Error updating leaderboard");
+                            return;
+                        }
+                        res.json({message: "Escape room and leaderboard deleted successfully"});
+                    });
+                } else {
+                    res.json({message: "Escape room deleted successfully, no leaderboard entry found."});
+                }
+            });
         });
     });
 });
@@ -150,7 +193,13 @@ app.post('/escapeRoom/update', (req, res) => {
             return;
         }
 
-        let rooms = JSON.parse(data);
+        let rooms;
+        try {
+            rooms = JSON.parse(data);
+        } catch (parseError) {
+            res.status(500).send("Failed to parse escape rooms data");
+            return;
+        }
 
         // Checking if the new title is already in use by another room, excluding the room being updated 
         if (rooms.some(room => room.title.toLowerCase() === newTitle.toLowerCase() && room.title.toLowerCase() !== originalTitle.toLowerCase())) {
@@ -171,8 +220,37 @@ app.post('/escapeRoom/update', (req, res) => {
                     res.status(500).send("Error saving updated escape room");
                     return;
                 }
-                // If the update is successful, send a 200 (OK) response with a success message
-                res.status(200).json({message: "Escape room updated successfully"});
+                // After successfully updating the room, update leaderboard.json
+                fs.readFile("leaderboard.json", "utf8", (err, leaderboardData) => {
+                    if (err) {
+                        res.status(500).send("Error reading leaderboard data");
+                        return;
+                    }
+                    let leaderboard;
+                    try {
+                        leaderboard = JSON.parse(leaderboardData);
+                    } catch (parseError) {
+                        res.status(500).send("Failed to parse leaderboard data");
+                        return;
+                    }
+                    
+                    if (originalTitle !== newTitle) { // Only update if the title has changed
+                        if (leaderboard[originalTitle]) {
+                            leaderboard[newTitle] = leaderboard[originalTitle];
+                            delete leaderboard[originalTitle];
+                        }
+                    }
+
+                    // Write the updated leaderboard back to the file
+                    fs.writeFile("leaderboard.json", JSON.stringify(leaderboard, null, 2), "utf8", err => {
+                        if (err) {
+                            res.status(500).send("Error updating leaderboard");
+                            return;
+                        }
+                        // If the update is successful, send a 200 (OK) response with a success message
+                        res.status(200).json({message: "Escape room and leaderboard updated successfully"});
+                    });
+                });
             });
         } else {
             res.status(404).send("Escape room not found");

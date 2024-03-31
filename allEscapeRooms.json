@@ -27,21 +27,21 @@
     "problems": [
       {
         "title": "Very wow problems, isn't there",
-        "description": "<p><span style=\"color: rgb(24, 28, 37); font-family: \" inter=\"\" var\",=\"\" sans-serif;=\"\" font-size:=\"\" 20px;=\"\" text-align:=\"\" start;=\"\" background-color:=\"\" rgb(246,=\"\" 248,=\"\" 247);\"=\"\">I always wanted to explore everything though, if for no other reason than because most of the environments are stunning. Big cliffside ocean views steal the show, but even the deep caves and shadowy crypts have an eerie charm thanks to both clever lighting and scenery that follows that “lived-in” ethos through every nook and cranny.</span><br></p>",
+        "description": "<p><span style=\"\" inter=\"\" var\",=\"\" sans-serif;=\"\" font-size:=\"\" 20px;=\"\" text-align:=\"\" start;=\"\" background-color:=\"\" rgb(246,=\"\" 248,=\"\" 247);\"=\"\">I always wanted to explore everything though, if for no other reason than because most of the environments are stunning. Big cliffside ocean views steal the show, but even the deep caves and shadowy crypts have an eerie charm thanks to both clever lighting and scenery that follows that “lived-in” ethos through every nook and cranny.</span><br></p>",
         "videoLink": "https://www.youtube.com/watch?v=eP-8qFJ7pZo",
         "correctAnswer": "its me",
         "hint": "or is it"
       },
       {
         "title": "such wow problems",
-        "description": "<p><span style=\"color: rgb(24, 28, 37); font-family: \" inter=\"\" var\",=\"\" sans-serif;=\"\" font-size:=\"\" 20px;=\"\" text-align:=\"\" start;=\"\" background-color:=\"\" rgb(246,=\"\" 248,=\"\" 247);\"=\"\"><i>Even so, there is such a strong sense of mystery that demands to be solved that I found myself dusting myself off to get back on the road every time some terrible nonsense befell me. The explicit lack of waypoints and map markers for side stories really helps nail the feeling that you aren’t simply a walking taskbot for all of this world’s NPCs to wind up, but a curious member of a living, breathing place that will march on valiantly whether you find what you’re looking for or not.</i></span><br></p>",
+        "description": "<p><span style=\"\" inter=\"\" var\",=\"\" sans-serif;=\"\" font-size:=\"\" 20px;=\"\" text-align:=\"\" start;=\"\" background-color:=\"\" rgb(246,=\"\" 248,=\"\" 247);\"=\"\"><b>Even so, there is such a strong sense of mystery that demands to be solved that I found myself dusting myself off to get back on the road every time some terrible nonsense befell me. The explicit lack of waypoints and map markers for side stories really helps nail the feeling that you aren’t simply a walking taskbot for all of this world’s NPCs to wind up, but a curious member of a living, breathing place that will march on valiantly whether you find what you’re looking for or not.</b></span><br></p>",
         "videoLink": "https://www.youtube.com/watch?v=eP-8qFJ7pZo",
         "correctAnswer": "now its you and me",
         "hint": "it is not, or is it, oh well there is"
       },
       {
         "title": "another one here",
-        "description": "<p><span style=\"font-family: ProximaNova, sans-serif; text-align: start; background-color: rgb(255, 255, 255);\"><font color=\"#ff9c00\" style=\"\">Dragon's Dogma is a marvelous game that fills you with the joy of exploring and unknown world filled with danger and adventure. It pulls you in and forces you to stay.</font></span><br></p>",
+        "description": "<p><span style=\"text-align: start;\">Dragon's Dogma is a marvelous game that fills you with the joy of exploring and unknown world filled with danger and adventure. It pulls you in and forces you to stay.</span><br></p>",
         "videoLink": "https://www.youtube.com/watch?v=jU-vkDLoGwQ",
         "correctAnswer": "Very much dragons",
         "hint": "no hints for ya, beat the dragon"

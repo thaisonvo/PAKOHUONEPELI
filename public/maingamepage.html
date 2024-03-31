@@ -23,19 +23,21 @@
             <iframe class="video" id="escapeRoomVideo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <footer class="footer">
-            <button id="startGameButton">Aloita peli</button>
-            <div class="buttons" style="display: none;">
-                <input id="codeInput" type="text" placeholder="Syötä koodi tähän">
-                <button id="checkTheCode">Tarkista koodi</button>
-                <button id="vihje">Näytä vihje</button>
-                <div id="hintsVisualContainer"></div>
+            <div class="contentContainer">
+                <button id="startGameButton">Aloita peli</button>
+                <div class="buttons" style="display: none;">
+                    <input id="codeInput" type="text" placeholder="Syötä koodi tähän">
+                    <button id="checkTheCode">Tarkista koodi</button>
+                    <button id="vihje">Näytä vihje</button>
+                </div>
+                <button id="continueButton" style="display: none;">Jatka seuraavaan huoneeseen</button>
+                <div class="hintIndicatorsContainer" id="hintIndicators"></div>
             </div>
-            <button id="continueButton" style="display: none;">Jatka seuraavaan huoneeseen</button>
         </footer>
         <div id="hintModal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
-                <span class="minimize">&#8211;</span>
+                <span class="close" title="Sulje">&times;</span>
+                <span class="minimize" title="Pienennä">&#8211;</span>
                 <p id="modalHintText">Tässä vinkki:</p>
             </div>
         </div>
@@ -132,27 +134,68 @@
             });
         });
 
+
+        // Is hint-modal open
+        let isHintModalOpen = false;
         // Event listener for showing a hint.
         const showHint = document.getElementById("vihje");
         showHint.addEventListener("click", async () => {
-            try {
-                // Fetch a hint from the server.
-                const response = await fetch("/api/game/getHint");
-                const data = await response.json();
+            if (!isHintModalOpen) {
+                try {
+                    // Fetch a hint from the server.
+                    const response = await fetch("/api/game/getHint");
+                    const data = await response.json();
 
-                // Display the hint in the hint window.
-                document.getElementById("modalHintText").innerText = data.hint;
+                    // Update hint indicators only if modal is not open.
+                    updateHintIndicators();
+                    isHintModalOpen = true;
+
+                    // Display the hint in the hint window.
+                    document.getElementById("modalHintText").innerText = data.hint;
+                    document.getElementById("hintModal").style.display = 'block';
+
+                } catch (error) {
+                    console.error(error);
+                }
+            } else {
+                // Only opens the last hint again, not updating hintcount or indicators
                 document.getElementById("hintModal").style.display = 'block';
-            } catch (error) {
-                console.error(error);
             }
         });
 
-        // Event listener for closing the hint window.
-        const closeHint = document.querySelector(".close");
-        closeHint.addEventListener("click", () => {
+        // Event listener for minimizing the hint window.
+        const minimizeHint = document.querySelector(".minimize");
+        minimizeHint.addEventListener("click", () => {
             document.getElementById("hintModal").style.display = 'none';
         });
+
+        // Event listener for closing the hint window with the close button.
+        const closeHint = document.querySelector(".close");
+        closeHint.addEventListener("click", () => {
+            const ConfirmClose = confirm('Haluatko varmasti sulkea vinkin? Et voi enää palata tähän vinkkiin tämän jälkeen.');
+            if (ConfirmClose) {
+                document.getElementById("hintModal").style.display = 'none';
+                isHintModalOpen = false; // Resets the hintmodal status, when hint-modal is closed
+            }   
+        });
+
+        async function updateHintIndicators() {
+            // Optionally, fetch the latest hint count from the server, or maintain it in client state.
+            const response = await fetch("/api/game/hintCount");
+            const data = await response.json();
+            const hintCount = data.hintsLeft;
+
+            const hintIndicators = document.getElementById("hintIndicators");
+            hintIndicators.innerHTML = ''; // Clear current indicators
+
+            // Generate and display new indicators
+            for (let i = 0; i < hintCount; i++) {
+                let indicator = document.createElement("span");
+                indicator.className = "hintIndicator";
+                indicator.textContent = "★";
+                hintIndicators.appendChild(indicator);
+            }
+        }
 
         // Updates the title, description and video of the page.
         function updateContent(data) {

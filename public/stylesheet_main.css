@@ -4,13 +4,19 @@ body {
     text-align: center;
     margin: 0;
     overflow-x: hidden;
+    background: linear-gradient(
+            rgba(0, 0, 0, 0.2),
+            rgba(0, 0, 0, 0.2)
+            ), url('/images/escaperoomie.jpg');
+            background-size: cover;
+            background-position: center;
 }
 
 .header {
+    background-color: rgba(33, 33, 33, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #0b0c10;
     height: 100px;
     grid-column: span 2; /* Make the header span across both columns */
 }
@@ -18,29 +24,23 @@ body {
 h1 {
     font-family: 'Courier New', Courier, monospace;
     font-size: 52px;
-    color: #5adcd3;
+    color: rgba(207, 216, 220, 1);
     font-weight: bold;
-    text-shadow: 0 0 20px #66fcf1,
-                 2px 2px 0 #0b0c10;
+    text-shadow: 0 0 20px rgba(207, 216, 220, 0.5),
+                 2px 2px 0 rgba(13, 17, 23, 0.8);
     text-transform: uppercase;
     letter-spacing: 2px;
     margin: 20px 0;
+    animation: pulse 2s infinite ease-in-out;
 }
 
 @keyframes pulse {
-    0% {
-        text-shadow: 0 0 8px #66fcf1, 2px 2px 0 #0b0c10;
+    0%, 100% {
+        text-shadow: 0 0 8px rgba(207, 216, 220, 0.5), 2px 2px 0 rgba(13, 17, 23, 0.8);
     }
     50% {
-        text-shadow: 0 0 20px #66fcf1, 2px 2px 0 #0b0c10;
+        text-shadow: 0 0 20px rgba(207, 216, 220, 0.5), 2px 2px 0 rgba(13, 17, 23, 0.8);
     }
-    100% {
-        text-shadow: 0 0 8px #66fcf1, 2px 2px 0 #0b0c10;
-    }
-}
-
-h1 {
-    animation: pulse 2s infinite ease-in-out;
 }
 
 .wrapper {
@@ -64,9 +64,9 @@ h1 {
 
 #timerDisplay {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    color: #daf6ff;
+    color: rgba(207, 216, 220, 1);
     font-size: 24px;
-    text-shadow: 5px 5px 10px #66fcf1;
+    text-shadow: 5px 5px 10px rgba(207, 216, 220, 0.5);
     padding: 10px;
     border: 5px;
     display: inline-block;
@@ -75,20 +75,20 @@ h1 {
 }
 
 .instructions {
-    background: #06636d;
+    background-color: rgba(13, 17, 23, 0.8);
     width: 100%;
-    height: 450px;
+    height: 475px;
     padding: 10px;
-    margin: 10px;
-    box-shadow: 6px 7px #044a52;
+    margin: 15px;
     box-sizing: border-box;
+    color: rgba(207, 216, 220, 1);
 }
 
 .video-container {
-    height: 490px;
+    height: 500px;
     width: 100%;
     padding: 10px;
-    margin: 10px;
+    margin: 5px;
     box-sizing: border-box;
     overflow-x: hidden;
 }
@@ -96,35 +96,44 @@ h1 {
 .video {
     background-color: #0b0c10;
     position: flex;
-    height: 95%;
-    width: 95%;
+    height: 99%;
+    width: 99%;
     overflow-x: hidden;
 }
 
 .footer {
-    background-color: #0b0c10;
+    background-color: rgba(33, 33, 33, 0.1);
     height: 150px;
     grid-column: span 2; /* Make the footer span across both columns */
     display: flex;
-    flex-direction: row;
     justify-content: center;
     overflow-x: hidden;
     align-items: center;
+    position: relative;
+    width: 100%;
+    padding: 20px;
 }
+
+.contentContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+    
 
 input[type="text"] {
     width: 90%;
     padding: 10px; 
     margin: 10px 0; 
-    border: 2px solid #055e68;
+    border: 2px solid rgba(207, 216, 220, 0.5);
     border-radius: 5px; 
-    color: black; 
-    background-color: #ffffff;
-    transition: border-color 0.3s, box-shadow 0.3s; 
+    color: #ffffff;
+    background-color: rgba(13, 17, 23, 0.8);
 
     &:focus {
-        border-color: #66fcf1;
-        box-shadow: 0 0 0 3px rgba(0, 173, 181, 0.25);
+        border-color: rgba(207, 216, 220, 1); 
+        box-shadow: 0 0 0 3px rgba(207, 216, 220, 0.5);
         outline: none;
     }
 }
@@ -132,18 +141,38 @@ input[type="text"] {
 #startGameButton {
     padding: 20px;
     font-size: 20px; 
-    color: #ffffff; 
-    background-color: #055e68; 
+    color: rgba(207, 216, 220, 1); 
+    background-color: rgba(13, 17, 23, 0.8);
     border: none; 
     border-radius: 7px;
     cursor: pointer; 
+    position: relative;
+    overflow: hidden;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.6);
 }
 
-#startGameButton:hover {
-    background-color: #097f8c;
-    box-shadow: 0 0 12px 0 rgba(9, 127, 140, 0.8);
+#startGameButton::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -75%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(30deg, rgba(207, 216, 220, 0) 30%, rgba(207, 216, 220, 0.4) 50%, rgba(207, 216, 220, 0) 70%);
+    animation: shine 1.5s infinite ease-out;
+}
+
+@keyframes shine {
+    0% {
+        left: -75%;
+    }
+    50% {
+        left: 125%;
+    }
+    100% {
+        left: -75%;
+    }
 }
 
 .buttons-column {
@@ -165,12 +194,12 @@ button {
     cursor: pointer;
     border-radius: 7px;
     border-style: solid;
-    border: 2px solid #055e68;
-    background-color: #055e68;
+    border: 2px solid rgba(207, 216, 220, 0.5);
+    background-color: rgba(13, 17, 23, 0.8);
     transition: background-color 0.3s, transform 0.3s;
 
     &:hover {
-        background-color: #097f8c;
+        background-color: rgba(13, 17, 23, 1);
         transform: translateY(-2px);
     }
 
@@ -186,51 +215,61 @@ button {
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: #ffffff;
+    color: rgba(207, 216, 220, 1);
     cursor: pointer;
     border-radius: 7px;
-    background-color: #055e68;
+    border-style: solid;
+    border: 2px solid rgba(207, 216, 220, 0.5);
+    background-color: rgba(13, 17, 23, 0.8);
 
     &:hover {
-        background-color: #097f8c;
+        background-color: rgba(13, 17, 23, 1); 
         transform: translateY(-2px);
     }
-
+    
     &:focus {
         outline: none;
-        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 0 2px rgba(207, 216, 220, 0.5);
     }
     
 }
 
-.hintVisual {
-    height: 15px;
-    width: 15px;
-    background-color: #00ff55;
-    border-radius: 50%;
-    display: inline-block;
+.hintIndicatorsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end; 
+}
+
+.hintIndicator {
+    color: gold;
+    margin: 0 5px;
+    font-size: 34px;
+    text-shadow: 2px 2px 8px rgb(23, 20, 0);
 }
 
 .modal {
     display: none; 
     position: fixed; 
-    z-index: 1; 
+    z-index: 1000; 
     left: 0;
     top: 0;
     width: 100%; 
     height: 100%; 
     overflow: auto; 
-    background-color: rgb(0,0,0); 
-    background-color: rgba(0,0,0,0.4); 
+    background-color: rgb(0, 0, 0, 0.7); 
+    backdrop-filter: blur(5px);
 }
 
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    position: relative; 
+    margin: 10% auto;
+    padding: 40px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 60%;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .close, .minimize {
@@ -240,26 +279,30 @@ button {
     font-weight: bold;
     cursor: pointer;
     position: absolute;
-    top: 5px; 
+    top: 20px; 
 }
 
 .close {
-    right: 5px;
+    right: 10px;
+    top: 5px;
 }
 
 .minimize {
     right: 40px;
+    top: 5px;
 }
 
 
-.close:hover,
-.close:focus {
+.close:hover, .minimize:hover,
+.close:focus, .minimize:focus {
     color: black;
     text-decoration: none;
-    cursor: pointer;
+    transform: scale(1.1);
 }
 
-
+.close:active, .minimize:active {
+    transform: scale(0.9);
+}
 
 
 textarea {
