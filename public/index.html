@@ -63,9 +63,20 @@
         async function renderLeaderBoard(escapeRoom) {
             const res = await fetch(`/leaderboard?escapeRoom=${escapeRoom}`);
             const data = await res.json();
-
+            
+            const leaderboardContainer = document.querySelector(".leaderboard");
             const leaderboardTable = document.getElementById("leaderboardTable");
-            const leaderboardTitle = document.getElementById("leaderboardTitle").innerText = `Pakohuoneen '${escapeRoom}' Top 10 nopeimmat:`;
+            const leaderboardTitle = document.getElementById("leaderboardTitle");
+
+            leaderboardTable.innerHTML = "";
+
+            if (!data || data.length === 0) {
+                leaderboardContainer.style.display = "none";
+                return;
+            }
+
+            leaderboardContainer.style.display = "";
+            leaderboardTitle.innerText = `🏆 Top 10: '${escapeRoom}' 🏆`;
 
             data.forEach((player, index) => {
                 const row = document.createElement('tr');
@@ -105,7 +116,6 @@
             const dropdownMenu = document.getElementById("allEscapeRooms");
             let selectedEscapeRoom;
             dropdownMenu.addEventListener("change", () => {
-                document.getElementById("leaderboardTable").innerHTML = "";
                 selectedEscapeRoom = dropdownMenu.value;
                 renderLeaderBoard(selectedEscapeRoom);
             });
