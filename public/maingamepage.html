@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pakohuonepeli</title>
-    <link rel="stylesheet" href="stylesheet_main.css">
+    <link rel="stylesheet" href="/css/stylesheet_main.css">
 </head>
 <body>
     <div class="wrapper">
@@ -45,7 +45,7 @@
 
     <script>
         // Fetch information about the selected escape room.
-        fetch(`/api/game/getIntroduction`)
+        fetch(`/game/introduction`)
             .then(response => response.json())
             .then(data => updateContent(data))
             .catch(error => {
@@ -57,7 +57,7 @@
         const startButton = document.getElementById("startGameButton");
         startButton.addEventListener("click", async () => {
             try {
-                await fetch("/api/game/startGame", {
+                await fetch("/game/start", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -65,7 +65,7 @@
                 });
                 
                 // Fetch the first question of the escape room.
-                const response = await fetch("/api/game/getQuestion");
+                const response = await fetch("/game/questions/current");
                 const data = await response.json();
 
                 // Update the content of the page.
@@ -91,7 +91,7 @@
                 // Extract the inputted answer.
                 const answer = document.getElementById("codeInput").value;
                 // Send a request to the server with the inputted answer for validation.
-                const response = await fetch("/api/game/checkAnswer", {
+                const response = await fetch("/game/questions/answer", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -122,7 +122,7 @@
             //The eventlistener for the continue-button
             const continueButton = document.getElementById("continueButton");
             continueButton.addEventListener("click", async () => {
-                const nextQuestion = await fetch('/api/game/getQuestion');
+                const nextQuestion = await fetch('/game/questions/current');
                 const nextData = await nextQuestion.json();
                 updateContent(nextData);
 
@@ -143,7 +143,7 @@
             if (!isHintModalOpen) {
                 try {
                     // Fetch a hint from the server.
-                    const response = await fetch("/api/game/getHint");
+                    const response = await fetch("/game/hints/current");
                     const data = await response.json();
 
                     // Update hint indicators only if modal is not open.
@@ -181,7 +181,7 @@
 
         async function updateHintIndicators() {
             // Optionally, fetch the latest hint count from the server, or maintain it in client state.
-            const response = await fetch("/api/game/hintCount");
+            const response = await fetch("/game/hints/count");
             const data = await response.json();
             const hintCount = data.hintsLeft;
 
@@ -199,7 +199,6 @@
 
         // Updates the title, description and video of the page.
         function updateContent(data) {
-            console.log('updating content')
             document.getElementById("gameTitle").innerText = data.title;
             document.getElementById("instructionsContent").innerHTML = data.description;
             const video = data.video.split('v=')[1];
@@ -212,7 +211,7 @@
         //Function to check the remaining game time
         function checkTime() {
             //Sends a GET request to the endpoint on the server
-            fetch('/api/game/checkTime')
+            fetch('/game/time')
                 .then(response => response.json())
                 .then(data => {
                     //Checks is the timeIsUp -in the response true

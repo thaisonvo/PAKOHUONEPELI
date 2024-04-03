@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kotisivu - Pakohuonepelit</title>
-    <link rel="stylesheet" href="stylegameIndex.css">
+    <link rel="stylesheet" href="/css/stylegameIndex.css">
 </head>
 <body>
     <div class="hero-section">
@@ -30,7 +30,7 @@
     <script>
         async function fetchEscapeRooms() {
             try {
-                const response = await fetch('/api/public/escapeRooms');
+                const response = await fetch('/escape-rooms');
                 if (!response.ok) {
                     throw new Error(`Failed to retrieve escape rooms.)`);
                 }
@@ -43,7 +43,7 @@
 
         async function initializePlayerAndStartGame(escapeRoom, playerName) {
             try {
-                const response = await fetch('/api/game/initializePlayer', {
+                const response = await fetch('/game/initialize', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -61,8 +61,9 @@
         }
 
         async function renderLeaderBoard(escapeRoom) {
-            const res = await fetch(`/api/public/leaderboard?escapeRoom=${escapeRoom}`);
+            const res = await fetch(`/leaderboard?escapeRoom=${escapeRoom}`);
             const data = await res.json();
+
             const leaderboardTable = document.getElementById("leaderboardTable");
             const leaderboardTitle = document.getElementById("leaderboardTitle").innerText = `Pakohuoneen '${escapeRoom}' Top 10 nopeimmat:`;
 

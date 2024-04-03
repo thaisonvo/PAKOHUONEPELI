@@ -3,7 +3,6 @@ const session = require("express-session");
 const fs = require("fs");
 const path = require('path');
 
-const allEscapeRooms = require('./allEscapeRooms.json');
 const app = express();
 
 app.use(express.json());
@@ -20,12 +19,10 @@ app.use(session({
     }
 }));
 
-// The map where all active games are stored.
-let activeGames = new Map();
-
-app.use('/', require('./pageRoutes'));
-app.use('/api/public', require('./api/publicDataAPI'));
-app.use('/api/game', require('./api/gameAPI')(activeGames, allEscapeRooms));
+app.use("/", require("./routes/pageRoutes"));
+app.use("/game", require("./routes/gameRoutes"));
+app.use("/leaderboard", require("./routes/leaderboardRoutes"));
+app.use("/escape-rooms", require("./routes/escapeRoomsRoutes"));
 
 app.get('/admin/home', (req, res) => {
     const indexPath = path.join(__dirname, 'private', 'indexAdmin.html');
@@ -264,12 +261,3 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`\nServer is running on http://localhost:${port}`);
 });
-
-function validateUser(req, res, next) {
-    const user = activeGames.get(req.session.id);
-    if (user && user.active) {
-        next();
-    } else {
-        return res.redirect('/');
-    }
-}

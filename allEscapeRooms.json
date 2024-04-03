@@ -47,5 +47,26 @@
         "hint": "no hints for ya, beat the dragon"
       }
     ]
+  },
+  {
+    "title": "NEW ESCAPE ROOM",
+    "description": "<p>HELLO IM TRYING THIS OUT</p>",
+    "videoLink": "https://www.youtube.com/watch?v=oCEoOXCzX9g",
+    "problems": [
+      {
+        "title": "FIRST PROBLEMO",
+        "description": "<p>numerou. no PREOPJAISP</p>",
+        "videoLink": "https://www.youtube.com/watch?v=oCEoOXCzX9g",
+        "correctAnswer": "1",
+        "hint": "HI"
+      },
+      {
+        "title": "SECOND PROBLEMO",
+        "description": "<p>JSILJFISJDIFLSJDIFSLDIFSDF</p>",
+        "videoLink": "https://www.youtube.com/watch?v=oCEoOXCzX9g",
+        "correctAnswer": "yes",
+        "hint": "JIASDJIAS"
+      }
+    ]
   }
 ]
