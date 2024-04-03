@@ -21,7 +21,6 @@ const getLeaderboard = async (req, res) => {
 const submitScore = async (req, res) => {
     try {
         const game = req.activeGames.get(req.session.id);
-        console.log(game);
         const allLeaderboards = await readFileJSON(path.join(__dirname, "..", "leaderboard.json"));
         const leaderboard = allLeaderboards[game.escapeRoom.title];
         leaderboard.push({ 

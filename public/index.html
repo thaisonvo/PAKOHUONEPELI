@@ -15,7 +15,7 @@
                     <option value="" disabled selected>Valitse pakohuone</option>
                     <!-- Other options here -->
                 </select>
-                <input type="text" id="playerName" placeholder="Syötä nimesi tähän..." required>
+                <input type="text" id="playerName" placeholder="Syötä nimesi tähän...">
                 <button id="startGameButton">Aloita peli</button>
             </div>
             <div class="leaderboard">
@@ -114,6 +114,19 @@
             startGameButton.addEventListener("click", () => {
                 const selectedEscapeRoom = document.getElementById("allEscapeRooms").value;
                 const playerName = document.getElementById("playerName").value;
+
+                if (!selectedEscapeRoom || !playerName) {
+                    alert("Valitse ensin pakohuone ja kirjoita käyttäjänimi.");
+                    return;
+                }
+
+                const nameValidationRegex = /^[A-Za-z0-9 ]+$/;
+                if (!nameValidationRegex.test(playerName)) {
+                    alert("Käyttäjänimi saa sisältää vain kirjaimia, numeroita ja välilyöntejä.");
+                    document.getElementById("playerName").focus();
+                    return;
+                }
+
                 initializePlayerAndStartGame(selectedEscapeRoom, playerName);
             });
         });
