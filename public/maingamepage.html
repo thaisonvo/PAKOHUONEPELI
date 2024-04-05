@@ -31,7 +31,7 @@
                     <button id="vihje">Näytä vihje</button>
                 </div>
                 <button id="continueButton" style="display: none;">Jatka seuraavaan huoneeseen</button>
-                <div class="hintIndicatorsContainer" id="hintIndicators"></div>
+                <div class="hintIndicatorsContainer" id="hintIndicators" title="Jäljellä olevat vihjeet"></div>
                 <div id="minimizedHintBox" class="minimized-hint-box" style="display: none;">
                     <button id="expandHint">Näytä käytetty vihje uudelleen</button>
                 </div>"
@@ -39,7 +39,7 @@
         </footer>
         <div id="hintModal" class="modal">
             <div class="modal-content">
-                <span class="minimize" title="Pienennä">&#8211;</span>
+                <button class="minimize-button">Pienennä</button>
                 <p id="modalHintText">Tässä vinkki:</p>
             </div>
         </div>
@@ -188,8 +188,8 @@
         });
 
         // Event listener for minimizing the hint window.
-        const minimizeHint = document.querySelector(".minimize");
-        minimizeHint.addEventListener("click", () => {
+        const minimizeButton = document.querySelector(".minimize-button");
+        minimizeButton.addEventListener("click", () => {
             document.getElementById("hintModal").style.display = 'none';
             document.getElementById("minimizedHintBox").style.display = 'block';
         });
@@ -253,11 +253,68 @@
 
         // Updates the title, description and video of the page.
         function updateContent(data) {
+            // Set the game title and instructions content from the data object
             document.getElementById("gameTitle").innerText = data.title;
             document.getElementById("instructionsContent").innerHTML = data.description;
-            const video = data.video.split('v=')[1];
-            document.getElementById("escapeRoomVideo").src = `https://www.youtube.com/embed/${video}`;
+
+            // Select the video container element
+            const videoContainer = document.getElementById("escapeRoomVideo");
+            
+            // Check if a video URL is provided and if it's a valid HTTP URL
+            if (data.video && isValidHttpUrl(data.video)) {
+                // Parse the video URL to handle different YouTube link formats
+                const videoUrl = new URL(data.video);
+                let videoId;
+
+                // Extract video ID for "youtu.be" short links
+                if (videoUrl.host === "youtu.be") {
+                    videoId = videoUrl.pathname.substring(1);
+                } 
+                // Extract video ID for standard "youtube.com" links
+                else if (videoUrl.host.includes("youtube.com")) {
+                    videoId = videoUrl.searchParams.get("v");
+                }
+
+                // If a video ID was successfully extracted, configure the video container
+                if (videoId) {
+                    videoContainer.src = `https://www.youtube.com/embed/${videoId}`;
+                    videoContainer.style.pointerEvents = 'auto';
+                    videoContainer.style.background = 'none';
+                    videoContainer.style.height = '99%';
+                } else {
+                    // If no valid video ID is found, display a black box instead
+                    displayBlackBox(videoContainer);
+                }
+            } else {
+                // If no video URL is provided or it's invalid, display a black box
+                displayBlackBox(videoContainer);
+            }
         }
+
+        // Display a black box in place of the video container
+        function displayBlackBox(videoContainer) {
+            videoContainer.src = ''; 
+            videoContainer.style.pointerEvents = 'none'; 
+            videoContainer.style.background = 'rgba(13, 17, 23, 0.8)';
+            videoContainer.style.height = '99%';
+        }
+
+        // Check if the provided string is a valid HTTP or HTTPS URL
+        function isValidHttpUrl(string) {
+            let url;
+            
+            try {
+                url = new URL(string); // Attempt to create a URL object
+            } catch (_) {
+                return false; // Return false if the string is not a valid URL
+            }
+
+            // Check if the URL's protocol is either HTTP or HTTPS
+            return url.protocol === "http:" || url.protocol === "https:";
+        }
+
+
+
 
 
         let timerInterval;

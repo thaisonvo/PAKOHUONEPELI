@@ -159,5 +159,33 @@
         "hint": "it's coarse, rough and gets everywhere"
       }
     ]
+  },
+  {
+    "title": "testataan videolinkkejä",
+    "description": "<p>videolinkki kopioutu videota right-clickkaamalla</p>",
+    "videoLink": "https://www.youtube.com/watch?v=D2ts2GWOSv8",
+    "problems": [
+      {
+        "title": "another video",
+        "description": "<p>soittolistasta kopioitu linkki</p>",
+        "videoLink": "https://www.youtube.com/watch?v=3sO-Y1Zbft4&list=RDCLAK5uy_k7h5535MeHE8xmgHsrZx7HOKH4lb5vAfY&index=2",
+        "correctAnswer": "1",
+        "hint": "1"
+      },
+      {
+        "title": "and another video",
+        "description": "<p>kopioutu jakonapin kautta linkki</p>",
+        "videoLink": "https://youtu.be/9Xr86ytdfaA?si=ExYU3TD3t-pU8F-L",
+        "correctAnswer": "2",
+        "hint": "2"
+      },
+      {
+        "title": "anothereerrere",
+        "description": "<p>linkki kopioitu selaimesta</p>",
+        "videoLink": "https://www.youtube.com/watch?v=-YQ8IbVIwPM",
+        "correctAnswer": "3",
+        "hint": "3"
+      }
+    ]
   }
 ]

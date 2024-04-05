@@ -273,36 +273,27 @@ button {
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.close, .minimize {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
+.minimize-button {
+    background-color: #e67e22; 
+    color: black; 
+    padding: 8px 15px; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-size: 16px; 
+    transition: background-color 0.3s, transform 0.3s;
     position: absolute;
-    top: 20px; 
-}
-
-.close {
     right: 10px;
-    top: 5px;
+    bottom: 10px;
 }
 
-.minimize {
-    right: 40px;
-    top: 5px;
+.minimize-button:hover,
+.minimize-button:focus {
+    background-color: #da6f12;
 }
 
-
-.close:hover, .minimize:hover,
-.close:focus, .minimize:focus {
-    color: black;
-    text-decoration: none;
-    transform: scale(1.1);
-}
-
-.close:active, .minimize:active {
-    transform: scale(0.9);
+.minimize-button:active {
+    transform: scale(0.98); 
 }
 
 
