@@ -5,6 +5,7 @@ class Game {
         this.questions = this.escapeRoom.problems;
         this.progress = 0;
         this.hintsLeft = 3;
+        this.usedHints = new Set();
         this.startTime = null;
         this.endTime = null;
         this.endTimeMs = null;
@@ -56,6 +57,18 @@ class Game {
 
     getHintCount() {
         return { hintsLeft: this.hintsLeft };
+    }
+
+    requestHint(questionIndex) {
+        if (this.hintsLeftLeft > 0 && !this.usedHints.has(questionIndex)) {
+            this.hintsLeft--;
+            this.usedHints.add(questionIndex);
+
+            const hint = this.questions[questionIndex].hint;
+            return { success: true, hint: hint };
+        } else {
+            return { success: false, hint: "Ei vihjeitä jäljellä, tai vihje on jo käytetty tässä pulmassa!"};
+        }
     }
 
     checkAnswer(userAnswer) {
