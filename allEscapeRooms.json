@@ -49,27 +49,6 @@
     ]
   },
   {
-    "title": "NEW ESCAPE ROOM",
-    "description": "<p>HELLO IM TRYING THIS OUT</p>",
-    "videoLink": "https://www.youtube.com/watch?v=oCEoOXCzX9g",
-    "problems": [
-      {
-        "title": "FIRST PROBLEMO",
-        "description": "<p>numerou. no PREOPJAISP</p>",
-        "videoLink": "https://www.youtube.com/watch?v=oCEoOXCzX9g",
-        "correctAnswer": "1",
-        "hint": "HI"
-      },
-      {
-        "title": "SECOND PROBLEMO",
-        "description": "<p>JSILJFISJDIFLSJDIFSLDIFSDF</p>",
-        "videoLink": "https://www.youtube.com/watch?v=oCEoOXCzX9g",
-        "correctAnswer": "yes",
-        "hint": "JIASDJIAS"
-      }
-    ]
-  },
-  {
     "title": "Vinkkien testaus",
     "description": "<p>asfsdf sdf sdfsdfsf</p>",
     "videoLink": "https://www.youtube.com/watch?v=eP-8qFJ7pZo",
@@ -129,34 +108,6 @@
         "videoLink": "-",
         "correctAnswer": "8",
         "hint": "hint8"
-      }
-    ]
-  },
-  {
-    "title": "New Escape Room :)",
-    "description": "Instructions and description goes here",
-    "videoLink": "https://www.youtube.com/watch?v=W55eQBtH8es",
-    "problems": [
-      {
-        "title": "First problem of the Escape room",
-        "description": "<p>What has keys but can't open locks?</p>",
-        "videoLink": "https://www.youtube.com/watch?v=4y33h81phKU&pp=ygUScGlhbm8gaW50ZXJzdGVsbGFy",
-        "correctAnswer": "piano",
-        "hint": "E minor, D major, etc."
-      },
-      {
-        "title": "Second problem of the Escape room",
-        "description": "<p>What comes once in a minute, twice in a moment but never in a thousand years?</p>",
-        "videoLink": "https://www.youtube.com/watch?v=eJO5HU_7_1w&pp=ygUKc2xpbSBzaGFkeQ%3D%3D",
-        "correctAnswer": "m",
-        "hint": "w"
-      },
-      {
-        "title": "Third problem of the Escape room",
-        "description": "<p>What becomes wetter, the more it dries?</p>",
-        "videoLink": "https://www.youtube.com/watch?v=HQDXWj50pdE&pp=ygUFdG93ZWw%3D",
-        "correctAnswer": "towel",
-        "hint": "it's coarse, rough and gets everywhere"
       }
     ]
   },

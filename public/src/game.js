@@ -73,6 +73,7 @@ submitAnswer.addEventListener("click", async () => {
       document.getElementById("checkTheCode").style.display = "none";
       document.getElementById("vihje").style.display = "none";
       document.getElementById("minimizedHintBox").style.display = "none";
+      document.getElementById("hintIndicators").style.display = "none";
     }
   } catch (error) {
     console.error(error);
@@ -89,6 +90,7 @@ submitAnswer.addEventListener("click", async () => {
       document.getElementById("codeInput").style.display = "block";
       document.getElementById("checkTheCode").style.display = "inline-block";
       document.getElementById("vihje").style.display = "inline-block";
+      document.getElementById("hintIndicators").style.display = "inline-block";
       document.getElementById("continueButton").style.display = "none";
       document.getElementById("codeInput").value = "";
 
