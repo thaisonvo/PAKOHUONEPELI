@@ -45,7 +45,17 @@ async function fetchAndUpdateLeaderboard(escapeRoom) {
     }
 }
 
-function validateInput (escapeRoom, playerName) {
+async function isUsernameTaken(escapeRoom, playerName) {
+    try {
+        const leaderboardData = await API.getLeaderboardOfRoom(escapeRoom);
+        return leaderboardData.some(entry => entry.playerName === playerName);
+    } catch (error) {
+        console.error(error);
+        return false; 
+    }
+}
+
+async function validateInput (escapeRoom, playerName) {
     if (!escapeRoom || !playerName) {
         alert("Valitse ensin pakohuone ja kirjoita käyttäjänimi.");
         return false;
@@ -56,6 +66,13 @@ function validateInput (escapeRoom, playerName) {
         document.getElementById("playerName").focus();
         return false;
     }
+
+    const usernameTaken = await isUsernameTaken(escapeRoom, playerName);
+    if (usernameTaken) {
+        alert("Käyttäjänimi on jo käytössä. Valitse toinen käyttäjänimi.");
+        document.getElementById("playerName").focus();
+        return false;
+    }
     return true;
 }
 
@@ -63,7 +80,8 @@ async function initializeGame() {
     const escapeRoom = document.getElementById('allEscapeRooms').value;
     const playerName = document.getElementById('playerName').value;
 
-    if (!validateInput(escapeRoom, playerName)) return;
+    const isValidInput = await validateInput(escapeRoom, playerName);
+    if (!isValidInput) return;
 
     try {
         await API.initializeGame({ escapeRoom, playerName });
