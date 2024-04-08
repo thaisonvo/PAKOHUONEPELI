@@ -264,11 +264,14 @@ button {
 .modal-content {
     background-color: #fefefe;
     margin: 10% auto;
-    padding: 40px;
+    padding: 20px;
+    padding-bottom: 60px;
     border-radius: 8px;
     border: none;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 60%;
+    width: 45%;
+    max-height: 60%;
+    overflow-y: auto;
     position: relative;
     transition: transform 0.3s, box-shadow 0.3s;
 }
@@ -276,15 +279,15 @@ button {
 .minimize-button {
     background-color: #e67e22; 
     color: black; 
-    padding: 8px 15px; 
+    padding: 10px 20px; 
     border: none; 
     border-radius: 8px; 
     cursor: pointer; 
     font-size: 16px; 
     transition: background-color 0.3s, transform 0.3s;
     position: absolute;
-    right: 10px;
-    bottom: 10px;
+    right: 12px;
+    bottom: 12px;
 }
 
 .minimize-button:hover,
