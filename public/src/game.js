@@ -10,8 +10,10 @@ fetch(`/game/introduction`)
   });
 
 // Event listener for the 'start game' button.
+let gameStarted = false;
 const startButton = document.getElementById("startGameButton");
 startButton.addEventListener("click", async () => {
+  gameStarted = true;
   try {
     await fetch("/game/start", {
       method: "POST",
@@ -250,13 +252,15 @@ let timerInterval;
 
 //Function to check the remaining game time
 function checkTime() {
+  if (!gameStarted) return;
   //Sends a GET request to the endpoint on the server
   fetch("/game/time")
     .then((response) => response.json())
     .then((data) => {
       //Checks is the timeIsUp -in the response true
       if (data.timeIsUp) {
-        alert("Aikasi on päättynyt!");
+        gameStarted = false;
+        alert("Aikasi on päättynyt! Voit kuitenkin jatkaa peliä loppuun asti.");
         clearInterval(timerInterval);
       } else {
         startLocalCountdown(data.timeLeft);
