@@ -10,11 +10,11 @@ async function fetchFromAPI(endpoint, options = {}) {
         throw new Error(`Request failed to: ${endpoint}`);
     }
 
-    if (response.headers.get('Content-Type').length !== 0) {
+    if (response.status !== 204 && response.headers.get('Content-Type').includes('application/json')) {
         try {
             return await response.json();
         } catch(error) {
-            console.error(`Failed to parse JSON from: ${endpoint}`, error);
+            throw new Error(`Failed to parse JSON from: ${endpoint}. Error: ${error}`);
         }
     }
 
@@ -22,11 +22,34 @@ async function fetchFromAPI(endpoint, options = {}) {
 }
 
 export const API = {
-    // For index.js API requests
+    // index.js API requests
     getEscapeRooms: () => fetchFromAPI('/escape-rooms'),
     initializeGame: (data) => fetchFromAPI('/game/initialize', {
         method: 'POST',
         body: JSON.stringify(data)
     }),
+
+    // index.js and congratulations.js API requests
     getLeaderboardOfRoom: (escapeRoom) => fetchFromAPI(`/leaderboard?escapeRoom=${escapeRoom}`),
+   
+    // congratulations.js API requests
+    submitScoreToLeaderboard: () => fetchFromAPI('/leaderboard/submit-score', {
+        method: 'POST'
+    }),
+
+    // game.js API requests
+    getIntroduction: () => fetchFromAPI('/game/introduction'),
+    startGame: () => fetchFromAPI('/game/start', {
+        method: 'POST'
+    }),
+    getQuestion: () => fetchFromAPI('/game/questions/current'),
+    checkAnswer: (answer) => fetchFromAPI('/game/questions/answer', {
+        method: 'POST',
+        body: JSON.stringify(answer)
+    }),
+    getHint: () => fetchFromAPI('/game/hints/current'),
+    getHintCount: () => fetchFromAPI('/game/hints/count'),
+    getTime: () => fetchFromAPI('/game/time'),
+    
+
 }

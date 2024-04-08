@@ -308,3 +308,20 @@ textarea {
         grid-template-columns: 1fr 1fr; /* Two columns for larger screens */
     }
 }
+
+.hint-bubble {
+    display: block; /* Initially hidden */
+    position: absolute;
+    bottom: 80%; /* Position it above the input box */
+    left: 35%;
+    transform: translateX(-50%); /* Center the bubble */
+    padding: 5px;
+    background-color: #f9f9f9;
+    color: #333;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 1; /* Ensure it's above other content */
+  }
+  

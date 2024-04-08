@@ -24,62 +24,6 @@
         <a href="/" class="button">Palaa takaisin etusivulle</a>
     </div>
 
-    <script>
-        const writeScore = async () => {
-            try {
-                const response = await fetch('/leaderboard/submit-score', {
-                    method: "POST"
-                });
-                const data = await response.json();
-                return data.rank;
-            } catch (err) {
-                console.error(err);
-            }
-        }
-
-        async function fetchLeaderboard() {
-            try {
-                const params = new URLSearchParams(window.location.search);
-                const escapeRoom = params.get("escapeRoom");
-
-                const response = await fetch(`/leaderboard?escapeRoom=${escapeRoom}`);
-                if (!response.ok) {
-                    throw new Error(`Failed to retrieve leaderboard.`);
-                }
-                const leaderboard = await response.json();
-                return leaderboard;
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        async function updateLeaderboard() {
-            const leaderboard = await fetchLeaderboard();
-            const leaderboardTable = document.getElementById("leaderboardTable");
-            let rank = 1;
-            leaderboard.forEach(player => {
-                const row = leaderboardTable.insertRow(-1);
-                const rankCell = row.insertCell(0);
-                const nameCell = row.insertCell(1);
-                const timeCell = row.insertCell(2);
-                rankCell.textContent = `${rank}.`;
-                nameCell.textContent = player.playerName;
-                timeCell.textContent = player.time;
-                rank++;
-            });
-        }
-
-        async function main() {
-            try {
-                const rank = await writeScore();
-                document.getElementById("ranking").textContent = `Sijoitut aikasi perusteella sijalle ${rank}!`;
-                updateLeaderboard();
-            } catch (err) {
-                console.error(err);
-            }
-        }
-
-        main();
-    </script>
+    <script type="module" src="/src/congratulations.js"></script>
 </body>
 </html>

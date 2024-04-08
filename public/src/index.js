@@ -10,8 +10,10 @@ async function fetchAndRenderDropdownMenu() {
             const dropdownMenu = document.getElementById('allEscapeRooms');
             dropdownMenu.appendChild(option);
         });
-    } catch(error) {
+    } catch (error) {
         console.error(error);
+        alert('Pakohuoneiden hakeminen epäonnistui. Ladataan sivu uudelleen.');
+        window.location.reload();
     }
 }
 
@@ -31,59 +33,60 @@ async function fetchAndUpdateLeaderboard(escapeRoom) {
         leaderboardContainer.style.display = '';
         leaderboardTitle.innerText = `🏆 Top 10: '${escapeRoom}' 🏆`;
 
-        leaderboardData.forEach((player, index) => {
-            const row = document.createElement('tr');
-            const rank = document.createElement('td');
-            const name = document.createElement('td');
-            const time = document.createElement('td');
-            rank.innerText = `${index + 1}.`;
-            name.innerText = player.playerName;
-            time.innerText = player.time;
-            row.appendChild(rank);
-            row.appendChild(name);
-            row.appendChild(time);
-            leaderboardTable.appendChild(row);
-        });
-    } catch(error) {
-        console.error(error);
+        const rowsHtml = leaderboardData.map((entry, index) => `
+            <tr>
+                <td>${index + 1} </td>
+                <td>${entry.playerName}</td>
+                <td>${entry.time}</td>
+        `).join('');
+        leaderboardTable.innerHTML = rowsHtml;
+    } catch (error) {
+        console.error(`Could not render leaderboard for room ${escapeRoom}`, error);
     }
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-    await  fetchAndRenderDropdownMenu();
+function validateInput (escapeRoom, playerName) {
+    if (!escapeRoom || !playerName) {
+        alert("Valitse ensin pakohuone ja kirjoita käyttäjänimi.");
+        return false;
+    }
+    const nameValidationRegex = /^[A-Za-z0-9 ]+$/;
+    if (!nameValidationRegex.test(playerName)) {
+        alert("Käyttäjänimi saa sisältää vain kirjaimia, numeroita ja välilyöntejä.");
+        document.getElementById("playerName").focus();
+        return false;
+    }
+    return true;
+}
 
+async function initializeGame() {
+    const escapeRoom = document.getElementById('allEscapeRooms').value;
+    const playerName = document.getElementById('playerName').value;
+
+    if (!validateInput(escapeRoom, playerName)) return;
+
+    try {
+        await API.initializeGame({ escapeRoom, playerName });
+        window.location.href = '/maingamepage';
+    } catch (error) {
+        console.error(error);
+        alert('Pelin aloittaminen epäonnistui. Yritä uudelleen.');
+    }
+}
+
+function setupEventListeners() {
     const dropdownMenu = document.getElementById('allEscapeRooms');
-    let escapeRoom;
-    dropdownMenu.addEventListener('change', async () => {
-        escapeRoom = dropdownMenu.value;
-        await fetchAndUpdateLeaderboard(escapeRoom);
+    dropdownMenu.addEventListener('change', () => {
+        const escapeRoom = dropdownMenu.value;
+        fetchAndUpdateLeaderboard(escapeRoom);
     });
 
+    const startGameButton = document.getElementById('startGameButton');
+    startGameButton.addEventListener('click', initializeGame);
+}
 
-    const startGameButton = document.getElementById("startGameButton");
-    startGameButton.addEventListener("click", async () => {
-        escapeRoom = dropdownMenu.value;
-        const playerName = document.getElementById("playerName").value;
 
-        if (!escapeRoom || !playerName) {
-            alert("Valitse ensin pakohuone ja kirjoita käyttäjänimi.");
-            return;
-        }
-
-        const nameValidationRegex = /^[A-Za-z0-9 ]+$/;
-        if (!nameValidationRegex.test(playerName)) {
-            alert("Käyttäjänimi saa sisältää vain kirjaimia, numeroita ja välilyöntejä.");
-            document.getElementById("playerName").focus();
-            return;
-        }
-
-        try {
-            await API.initializeGame({ escapeRoom, playerName });
-            window.location.href = '/maingamepage';
-        } catch(error) {
-            console.error(error);
-            alert('Pelin aloittaminen epäonnistui. Yritä uudelleen.');
-            return;
-        }
-    });
+document.addEventListener("DOMContentLoaded", async () => {
+    await fetchAndRenderDropdownMenu();
+    setupEventListeners();
 });

@@ -12,7 +12,7 @@ const initializePlayer = async (req, res) => {
 
         const newGame = new Game(roomData, playerName);
         activeGames.set(req.session.id, newGame);
-        return res.sendStatus(201);
+        return res.sendStatus(204);
     } catch (err) {
         console.error(err);
         return res.sendStatus(500);
