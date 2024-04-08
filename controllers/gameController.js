@@ -44,6 +44,11 @@ const getHintCount = (req, res) => {
     return res.json(game.getHintCount());
 }
 
+const getAnswerLength = (req, res) => {
+    const game = req.activeGames.get(req.session.id);
+    return res.json(game.getAnswerLength());
+}
+
 const checkAnswer = (req, res) => {
     const game = req.activeGames.get(req.session.id);
     const { answer } = req.body;
@@ -62,6 +67,7 @@ module.exports = {
     getQuestion,
     getHint,
     getHintCount,
+    getAnswerLength,
     checkAnswer,
     checkTime
 };

@@ -71,6 +71,11 @@ class Game {
         }
     }
 
+    getAnswerLength() {
+        const length = this.questions[this.progress].correctAnswer.replace(/\s/g, "").toLowerCase().length;
+        return { length };
+    }
+
     checkAnswer(userAnswer) {
         const correctAns = this.questions[this.progress].correctAnswer.replace(/\s/g, "").toLowerCase();
         const userAns = userAnswer.replace(/\s/g, "").toLowerCase();

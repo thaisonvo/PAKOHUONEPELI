@@ -1,3 +1,5 @@
+import { API } from './API/api.js';
+
 // Fetch information about the selected escape room.
 fetch(`/game/introduction`)
   .then((response) => response.json())
@@ -180,27 +182,6 @@ async function updateHintIndicators() {
   }
 }
 
-async function requestHint(questionIndex) {
-  if (!isHintModalOpen) {
-    try {
-      const response = await fetch(`/game/hints/${questionIndex}`);
-      const data = await response.json();
-
-      if (data.hint) {
-        updateHintIndicators();
-        isHintModalOpen = true;
-
-        document.getElementById("modalHintText").innerText = data.hint;
-        document.getElementById("hintModal").style.display = "block";
-      } else {
-        alert(data.hint);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-}
-
 // Updates the title, description and video of the page.
 function updateContent(data) {
   // Set the game title and instructions content from the data object
@@ -309,13 +290,13 @@ function startLocalCountdown(timeLeftInSeconds) {
 
 const answerField = document.getElementById('codeInput');
 const inputHint = document.getElementById('inputHint');
-answerField.addEventListener('input', () => {
+answerField.addEventListener('input', async () => {
   const answerLength = answerField.value.length;
-  const maxLength = 5;
+  const getLength = await API.getAnswerLength();
+  const correctLength = getLength.length;
 
-  if (answerLength > maxLength) {
-    console.log('adding show class to inputhint');
-    inputHint.textContent = `Vastaus on ${maxLength} merkkiä pitkä`;
+  if (answerLength > correctLength) {
+    inputHint.textContent = `Vastaus on ${correctLength} merkkiä pitkä`;
     inputHint.style.display = 'block';
   } else {
     inputHint.style.display = 'none';

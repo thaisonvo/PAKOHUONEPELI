@@ -50,6 +50,6 @@ export const API = {
     getHint: () => fetchFromAPI('/game/hints/current'),
     getHintCount: () => fetchFromAPI('/game/hints/count'),
     getTime: () => fetchFromAPI('/game/time'),
-    
+    getAnswerLength: () => fetchFromAPI("/game/questions/answer-length")
 
 }

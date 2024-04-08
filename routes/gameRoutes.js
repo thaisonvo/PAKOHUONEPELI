@@ -8,7 +8,8 @@ const {
     getHint,
     getHintCount,
     checkAnswer,
-    checkTime
+    checkTime,
+    getAnswerLength
 } = require("../controllers/gameController");
 
 router.use(attachActiveGamesMap);
@@ -19,6 +20,7 @@ router.get("/introduction", getIntroduction);
 router.get("/questions/current", getQuestion);
 router.get("/hints/current", getHint);
 router.get("/hints/count", getHintCount);
+router.get("/questions/answer-length", getAnswerLength);
 router.post("/questions/answer", checkAnswer);
 router.get("/time", checkTime);
 
