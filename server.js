@@ -46,6 +46,22 @@ app.get('/admin/delete-room', (req, res) => {
     res.sendFile(pagePath);
 });
 
+app.get('/admin/page', (req, res) => {
+    const AdminToolsPath = path.join(__dirname, 'private', 'indexAdmin.html');
+    res.sendFile(AdminToolsPath);
+})
+
+//Check the adminPassword
+app.post('/api/checkPassword', (req, res) => {
+    const { password } = req.body;
+
+    if (password == "Kao2023!") {
+        res.json({ success: true});
+    } else {
+        res.json({ success: false });
+    }
+});
+
 // Add new escape room
 app.post("/escapeRoom", (req, res) => {
     const newRoom = req.body;

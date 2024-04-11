@@ -37,6 +37,12 @@ export const API = {
         method: 'POST'
     }),
 
+    // index.js admin password
+    checkAdminPassword: (password) => fetchFromAPI('/api/checkPassword', {
+        method: 'POST',
+        body: JSON.stringify({ password })
+    }),
+
     // game.js API requests
     getIntroduction: () => fetchFromAPI('/game/introduction'),
     startGame: () => fetchFromAPI('/game/start', {

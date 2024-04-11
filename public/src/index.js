@@ -108,3 +108,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     await fetchAndRenderDropdownMenu();
     setupEventListeners();
 });
+
+document.getElementById('adminButton').addEventListener('click', function() {
+    document.getElementById('adminModal').style.display = 'block';
+});
+
+document.querySelector('.close').addEventListener('click', function() {
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('adminModal').style.display = 'none';
+});
+
+document.getElementById('submitPassword').addEventListener('click', async function() {
+    const password = document.getElementById('adminPassword').value;
+    try {
+        const result = await API.checkAdminPassword(password);
+        if (result.success) {
+            window.location.href = '/admin/page';
+        } else {
+            alert('Väärä salasana!');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Salasanan tarkistus epäonnistui');
+    }
+});
+
+window.onclick = function(event) {
+    const modal = document.getElementById('adminModal');
+    if (event.target === modal) {
+        document.getElementById('adminPassword').value = '';
+        modal.style.display = "none";
+    }
+}
